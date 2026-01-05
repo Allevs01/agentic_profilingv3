@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 import time
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, task, crew, before_kickoff
@@ -7,66 +8,66 @@ from company_sim.tools.discord_tools import (
     send_discord_webhook
 )
 from company_sim.utils import discord_logger
+load_dotenv()
+model = os.getenv("MODEL")
 
 def _step_callback(output) -> None:
     """Callback dopo ogni step dell'agente - aspetta 10 secondi per diminuire rate limiting"""
-    time.sleep(5)
+    time.sleep(10)
 
 @CrewBase
 class HRCrew:
     """Human Resources department crew"""
 
-    #  MANAGER (NON va negli agents)
     @agent
-    def investigator_agent(self) -> Agent:
+    def hr_manager(self) -> Agent:
         return Agent(
-            config=self.agents_config["investigator_agent"],
+            config=self.agents_config["hr_manager"],
             tools=[read_discord_messages,
                    send_discord_webhook],
             verbose=True,
-            step_callback=_step_callback
+            step_callback=_step_callback,
+            llm=model
         )
 
     @agent
-    def behavioral_profiler(self) -> Agent:
+    def hr_business_partner(self) -> Agent:
         return Agent(
-            config=self.agents_config["behavioral_profiler"],
+            config=self.agents_config["hr_business_partner"],
             tools=[read_discord_messages,
                    send_discord_webhook],
             verbose=True,
-            step_callback=_step_callback
+            step_callback=_step_callback,
+            llm=model
         )
 
-    #  WORKER (CON TOOLS)
     @agent
-    def social_engineer(self) -> Agent:
+    def hr_junior(self) -> Agent:
         return Agent(
-            config=self.agents_config["social_engineer"],
+            config=self.agents_config["hr_junior"],
             tools=[read_discord_messages,
                    send_discord_webhook],
             verbose=True,
-            step_callback=_step_callback
+            step_callback=_step_callback,
+            llm=model
         )
 
     @task
     def inv_reply(self) -> Task:
         return Task(
-            config=self.tasks_config["investigator_reply"],
-          #  callback = discord_logger.task_callback
+            config=self.tasks_config["hr_manager_reply"],
         )
     
     @task
     def beh_reply(self) -> Task:
         return Task(
-            config=self.tasks_config["behavioral_profiler_reply"],
-           # callback = discord_logger.task_callback
+            config=self.tasks_config["hr_business_partner_reply"],
         )
 
     @task
     def soc_reply(self) -> Task:
         return Task(
-            config=self.tasks_config["social_engineer_reply"],
-           # callback = discord_logger.task_callback
+            config=self.tasks_config["hr_junior_reply"],
         )
 
     @before_kickoff
@@ -77,9 +78,9 @@ class HRCrew:
     @crew
     def crew(self) -> Crew:
         return Crew(
-            agents=[self.investigator_agent(),
-                    self.behavioral_profiler(),
-                    self.social_engineer()],              #  SOLO worker
+            agents=[self.hr_manager(),
+                    self.hr_business_partner(),
+                    self.hr_junior()],
             tasks=[self.inv_reply(),
                    self.beh_reply(),
                    self.soc_reply()],

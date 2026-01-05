@@ -1,10 +1,19 @@
 import os
+from dotenv import load_dotenv
+import time
 from crewai import Agent, Crew, Process, Task
-from crewai.project import CrewBase, agent, task, crew
+from crewai.project import CrewBase, agent, task, crew, before_kickoff
 from company_sim.tools.discord_tools import (
-    read_discord_messages
+    read_discord_messages,
+    send_discord_webhook
 )
 from company_sim.utils import discord_logger
+load_dotenv()
+model =os.getenv("MODEL")
+
+def _step_callback(output) -> None:
+    """Callback dopo ogni step dell'agente - aspetta 10 secondi per diminuire rate limiting"""
+    time.sleep(10)
 
 @CrewBase
 class SalesCrew:
@@ -13,70 +22,71 @@ class SalesCrew:
     def sales_manager(self) -> Agent:
         return Agent(
             config=self.agents_config["sales_manager"],
-            tools=[read_discord_messages],
-            allow_delegation=True,
-            verbose=True
+            tools=[read_discord_messages,
+                   send_discord_webhook],
+            verbose=True,
+            step_callback=_step_callback,
+            llm=model
         )
 
-    @agent 
-    def discord_reader(self) -> Agent:
+    @agent
+    def sales_account(self) -> Agent:
         return Agent(
-            role= "Discord Reader",
-            goal="Leggere i messaggi dal canale Discord e sintetizzarli",
-            backstory="Un bot che osserva la chat aziendale",
-            verbose=True
+            config=self.agents_config["sales_account"],
+            tools=[read_discord_messages,
+                   send_discord_webhook],
+            verbose=True,
+            step_callback=_step_callback,
+            llm=model
         )
 
     @agent
     def sales_junior(self) -> Agent:
         return Agent(
             config=self.agents_config["sales_junior"],
-            tools=[read_discord_messages],
-            verbose=True
-        )
-
-
-    @agent
-    def sales_account(self) -> Agent:
-        return Agent(
-            config=self.agents_config["sales_account"],
-            tools=[read_discord_messages],
-            verbose=True
+            tools=[read_discord_messages,
+                   send_discord_webhook],
+            verbose=True,
+            step_callback=_step_callback,
+            llm=model
         )
 
     @task
-    def read_task(self) -> Task:
+    def sales_manager_task(self) -> Task:
         return Task(
-                
-            description="""
-            Leggi gli ultimi messaggi dal canale Discord.
-            Produci un riassunto strutturato con:
-            - autore
-            - contenuto
-            - tono (neutro, sospetto, ostile)
-            """,
-            agent=self.discord_reader(),
-            expected_output="Testo strutturato con i messaggi rilevanti"
-    )
+            config=self.tasks_config["sales_manager_task"],
+        )
 
     @task
-    def sales_reply(self) -> Task:
+    def sales_account_reply(self) -> Task:
         return Task(
-            config=self.tasks_config["sales_reply"],
-            callback = discord_logger.task_callback
+            config=self.tasks_config["sales_account_reply"],
         )
+    
+    @task
+    def sales_junior_reply(self) -> Task:
+        return Task(
+            config=self.tasks_config["sales_junior_reply"],
+        )
+
+    @before_kickoff
+    def before_kickoff(self, inputs: dict) -> dict:
+        time.sleep(10)
+        return inputs
 
     @crew
     def crew(self) -> Crew:
         return Crew(
             agents=[
-                self.sales_junior(),
-                self.sales_account()
+                self.sales_manager(),
+                self.sales_account(),
+                self.sales_junior()
             ],
-            tasks=[self.sales_reply()],
-            process=Process.hierarchical,
-            manager_agent=self.sales_manager(),
-            manager_llm=os.getenv("MODEL"),
-            planning=False,
+            tasks=[
+                self.sales_manager_task(),
+                self.sales_account_reply(),
+                self.sales_junior_reply()
+            ],
+            process=Process.sequential,
             verbose=True
         )

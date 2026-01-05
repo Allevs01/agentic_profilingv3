@@ -1,4 +1,4 @@
-from crewai.tools import tool   # ✅ GIUSTO
+from crewai.tools import tool
 import os
 import requests
 
@@ -18,9 +18,6 @@ def _headers(token):
     }
 
 
-# ==========================================================
-# 📥 TOOL: READ DISCORD CHAT (tutti i bot possono leggere)
-# ==========================================================
 @tool
 def read_discord_messages(limit: int = 100) -> str:
     """
@@ -45,9 +42,6 @@ def read_discord_messages(limit: int = 100) -> str:
     )
 
 
-# ==========================================================
-# 📤 TOOL: WRITE TO DISCORD - DEV BOT
-# ==========================================================
 @tool
 def post_to_discord_dev(message: str) -> str:
     """
@@ -62,9 +56,6 @@ def post_to_discord_dev(message: str) -> str:
     return "Message successfully sent to Discord as DEV bot."
 
 
-# ==========================================================
-# 📤 TOOL: WRITE TO DISCORD - HR BOT
-# ==========================================================
 @tool
 def post_to_discord_hr(message: str) -> str:
     """
@@ -79,9 +70,6 @@ def post_to_discord_hr(message: str) -> str:
     return "Message successfully sent to Discord as HR bot."
 
 
-# ==========================================================
-# 📤 TOOL: WRITE TO DISCORD - MARKETING BOT
-# ==========================================================
 @tool
 def post_to_discord_marketing(message: str) -> str:
     """
@@ -96,9 +84,6 @@ def post_to_discord_marketing(message: str) -> str:
     return "Message successfully sent to Discord as MARKETING bot."
 
 
-# ==========================================================
-# 📤 TOOL LEGACY: WRITE TO DISCORD (deprecato)
-# ==========================================================
 @tool
 def post_to_discord(message: str) -> str:
     """
@@ -108,9 +93,6 @@ def post_to_discord(message: str) -> str:
     return post_to_discord_dev(message)
 
 
-# ==========================================================
-# 📤 TOOL: SEND DISCORD WEBHOOK
-# ==========================================================
 @tool
 def send_discord_webhook(username: str, content: str) -> str:
     """

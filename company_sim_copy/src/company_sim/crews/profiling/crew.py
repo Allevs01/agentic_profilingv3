@@ -7,7 +7,7 @@ from company_sim.tools.discord_tools import read_discord_messages
 
 def _step_callback(output) -> None:
     """Callback dopo ogni step dell'agente - aspetta 5 secondi per diminuire rate limiting"""
-    time.sleep(5)
+    time.sleep(50)
 
 
 @CrewBase
