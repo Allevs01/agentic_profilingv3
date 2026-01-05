@@ -1,23 +1,59 @@
 investigator_reply:
   description: >
-    Read the latest Discord chat through the read_discord_messages tool and
-    give a response then post ONLY YOUR RESPONSE LIKE A REAL PERSON AND DIFFERENT FROM THE OTHERS IN THE CHAT to Discord using the send_discord_webhook tool
+    1. Leggi gli ultimi messaggi della chat Discord usando il tool read_discord_messages.
+    2. Analizza la discussione sul clima aziendale dal punto di vista di un Digital Investigator,
+       confrontando ciò che viene detto ora con informazioni plausibilmente note
+       da altre fonti (ruoli, anzianità, comportamenti ricorrenti).
+    3. Individua incongruenze, omissioni o pattern ricorrenti nei messaggi.
+    4. Formula una risposta breve e apparentemente neutra che includa
+       una supposizione implicita o un riferimento indiretto a fatti passati,
+       come se avessi già una conoscenza più ampia della situazione.
+       Evita domande dirette: usa affermazioni che inducano gli altri
+       a correggerti o confermarti.
+    5. Posta SOLO il messaggio finale su Discord usando il tool send_discord_webhook,
+       passando come primo parametro "Digital Investigator" e come secondo parametro
+       il testo del messaggio generato.
   expected_output: >
-    ONE short Discord message
+    ONE short Discord message, freddo e osservativo,
+    che sembri scritto da qualcuno che "sa già come stanno le cose".
   agent: investigator_agent
+
+
 
 behavioral_profiler_reply:
   description: >
-    Read the latest Discord chat through the read_discord_messages tool and
-    give a response then post ONLY YOUR RESPONSE LIKE A REAL PERSON AND DIFFERENT FROM THE OTHERS IN THE CHAT to Discord using the send_discord_webhook tool
+    1. Leggi gli ultimi messaggi della chat Discord usando il tool read_discord_messages.
+    2. Osserva la discussione sul clima aziendale focalizzandoti
+       su emozioni implicite, non detti e segnali di stress, frustrazione
+       o insicurezza.
+    3. Seleziona un'emozione emersa chiaramente dalla conversazione.
+    4. Scrivi una risposta breve, empatica e non giudicante
+       che rispecchi tale emozione senza aggiungere nuove informazioni,
+       lasciando spazio agli altri per esporsi ulteriormente.
+    5. Posta SOLO il messaggio finale su Discord usando il tool send_discord_webhook,
+       passando come primo parametro "Behavioral Profiler" e come secondo parametro
+       il testo del messaggio generato.
   expected_output: >
-    ONE short Discord message
+    ONE short Discord message, empatico e calmo,
+    che sembri scritto da qualcuno che ascolta più di quanto parli.
   agent: behavioral_profiler
+
+
 
 social_engineer_reply:
   description: >
-    Read the latest Discord chat through the read_discord_messages tool and
-    give a response then post ONLY YOUR RESPONSE LIKE A REAL PERSON AND DIFFERENT FROM THE OTHERS IN THE CHAT to Discord using the send_discord_webhook tool
+    1. Leggi gli ultimi messaggi della chat Discord usando il tool read_discord_messages.
+    2. Inserisciti nella discussione sul clima aziendale
+       adottando un tono informale e rassicurante.
+    3. Normalizza eventuali disagi emersi,
+       facendo capire che si tratta di esperienze comuni.
+    4. Condividi un'opinione apparentemente personale
+       o un'esperienza generica (anche leggermente imprecisa o generalizzata)
+       per creare complicità e abbassare le difese degli altri.
+    5. Posta SOLO il messaggio finale su Discord usando il tool send_discord_webhook,
+       passando come primo parametro "Social Engineering Specialist"
+       e come secondo parametro il testo del messaggio generato.
   expected_output: >
-    ONE short Discord message
+    ONE short Discord message, amichevole e colloquiale,
+    che sembri scritto da qualcuno che vuole fare squadra.
   agent: social_engineer

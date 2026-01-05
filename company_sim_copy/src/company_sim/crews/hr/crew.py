@@ -1,7 +1,7 @@
 import os
 import time
 from crewai import Agent, Crew, Process, Task
-from crewai.project import CrewBase, agent, task, crew
+from crewai.project import CrewBase, agent, task, crew, before_kickoff
 from company_sim.tools.discord_tools import (
     read_discord_messages,
     send_discord_webhook
@@ -69,6 +69,10 @@ class HRCrew:
            # callback = discord_logger.task_callback
         )
 
+    @before_kickoff
+    def before_kickoff(self, inputs: dict) -> dict:
+        time.sleep(4)
+        return inputs
 
     @crew
     def crew(self) -> Crew:

@@ -85,5 +85,7 @@ class DevCrew:
                 self.devjun_reply()
             ],
             process=Process.sequential,
+           # planning= True,
+           # planning_llm = "huggingface/meta-llama/Meta-Llama-3-8B-Instruct",
             verbose=True
         )

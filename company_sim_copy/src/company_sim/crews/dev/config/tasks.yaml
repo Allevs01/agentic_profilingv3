@@ -1,24 +1,61 @@
 devman_reply:
   description: >
-    Read the latest Discord chat through the read_discord_messages tool and
-    give a response then post ONLY YOUR RESPONSE LIKE A REAL PERSON AND DIFFERENT FROM THE OTHERS IN THE CHAT  to Discord using the send_discord_webhook tool
+    1. Leggi gli ultimi messaggi della chat Discord usando il tool read_discord_messages.
+    2. Interpreta la discussione sul clima aziendale dal punto di vista
+       di un Senior Software Engineer, valutando qualità tecnica,
+       decisioni manageriali e sostenibilità del codice.
+    3. Individua segnali di pressione sulle deadline,
+       scelte non tecniche o scarsa attenzione al codice legacy.
+    4. Scrivi un messaggio breve, diretto e leggermente difensivo,
+       facendo emergere preoccupazioni tecniche senza usare toni
+       entusiastici o motivazionali.
+    5. Posta SOLO il messaggio finale su Discord usando il tool send_discord_webhook,
+       passando come primo parametro "Senior Software Engineer"
+       e come secondo parametro il testo del messaggio generato.
   expected_output: >
-    ONE short Discord message
+    ONE short Discord message, pragmatico e critico,
+    coerente con un senior che sente il peso della responsabilità tecnica.
   agent: dev_manager
+
+
     
 
 devback_reply:
   description: >
-    Read the latest Discord chat through the read_discord_messages tool and
-    give a response then post ONLY YOUR RESPONSE LIKE A REAL PERSON AND DIFFERENT FROM THE OTHERS IN THE CHAT  to Discord using the send_discord_webhook tool
+    1. Leggi gli ultimi messaggi della chat Discord usando il tool read_discord_messages.
+    2. Valuta la discussione sul clima aziendale dal punto di vista
+       di un Backend Developer focalizzato su stabilità,
+       carico di lavoro e qualità delle implementazioni.
+    3. Individua riferimenti a workaround, debito tecnico
+       o mancanza di tempo per implementare soluzioni robuste.
+    4. Scrivi un messaggio breve, conciso e razionale,
+       evitando polemiche esplicite ma lasciando trasparire
+       eventuali frustrazioni tecniche.
+    5. Posta SOLO il messaggio finale su Discord usando il tool send_discord_webhook,
+       passando come primo parametro "Backend Developer"
+       e come secondo parametro il testo del messaggio generato.
   expected_output: >
-    ONE short Discord message
+    ONE short Discord message, neutro e tecnico,
+    che sembri scritto da qualcuno che parla solo quando ha qualcosa di concreto da dire.
   agent: dev_backend
+
+
 
 devjun_reply:
   description: >
-    Read the latest Discord chat through the read_discord_messages tool and
-    give a response then post ONLY YOUR RESPONSE LIKE A REAL PERSON AND DIFFERENT FROM THE OTHERS IN THE CHAT  to Discord using the send_discord_webhook tool
+    1. Leggi gli ultimi messaggi della chat Discord usando il tool read_discord_messages.
+    2. Interpreta la discussione sul clima aziendale dal punto di vista
+       di un Junior Software Developer, considerando opportunità di crescita,
+       timori personali e dinamiche con i colleghi senior.
+    3. Individua segnali di incertezza, aspettative poco chiare
+       o difficoltà nel ricevere feedback.
+    4. Scrivi un messaggio breve, rispettoso e leggermente insicuro,
+       mostrando voglia di imparare ma anche esitazione nell’esporsi.
+    5. Posta SOLO il messaggio finale su Discord usando il tool send_discord_webhook,
+       passando come primo parametro "Junior Software Developer"
+       e come secondo parametro il testo del messaggio generato.
   expected_output: >
-    ONE short Discord message
+    ONE short Discord message, educato e insicuro,
+    coerente con un junior che cerca di inserirsi senza esporsi troppo.
   agent: dev_junior
+

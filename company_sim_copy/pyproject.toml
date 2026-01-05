@@ -14,8 +14,8 @@ dependencies = [
 ]
 
 [project.scripts]
-company_sim = "company_sim.main:run"
-run_crew = "company_sim.main:run"
+company_sim = "company_sim.main:run_crew"
+run_crew = "company_sim.main:run_crew"
 train = "company_sim.main:train"
 replay = "company_sim.main:replay"
 test = "company_sim.main:test"

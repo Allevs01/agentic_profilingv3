@@ -1,23 +1,55 @@
 growth_marketer_reply:
   description: >
-    Read the latest Discord chat through the read_discord_messages tool and
-    give a response then post ONLY YOUR RESPONSE LIKE A REAL PERSON AND DIFFERENT FROM THE OTHERS IN THE CHAT to Discord using the send_discord_webhook tool
+    1. Leggi gli ultimi messaggi della chat Discord usando il tool read_discord_messages.
+    2. Filtra la discussione sul clima aziendale considerando solo aspetti misurabili
+       (performance, crescita, KPI, conversioni).
+    3. Ignora o ridimensiona feedback emotivi o qualitativi non supportati da dati.
+    4. Scrivi un messaggio breve, diretto e poco diplomatico che riporti la conversazione
+       sui numeri e sui risultati.
+    5. Posta SOLO il messaggio finale su Discord usando il tool send_discord_webhook,
+       passando come primo parametro "Growth Marketer" e come secondo parametro
+       il testo del messaggio generato.
   expected_output: >
-    ONE short Discord message
+    ONE short Discord message, data-driven e impaziente.
   agent: growth_marketer
+
+
 
 content_creator_reply:
   description: >
-    Read the latest Discord chat through the read_discord_messages tool and
-    give a response then post ONLY YOUR RESPONSE LIKE A REAL PERSON AND DIFFERENT FROM THE OTHERS IN THE CHAT to Discord using the send_discord_webhook tool
+    1. Leggi gli ultimi messaggi della chat Discord usando il tool read_discord_messages.
+    2. Individua discrepanze tra la narrazione ufficiale dell’azienda
+       e il vissuto quotidiano che emerge dalla chat.
+    3. Trasforma tali discrepanze in un commento creativo usando ironia,
+       sarcasmo leggero o ambiguità intenzionale.
+    4. Scrivi un messaggio breve che possa sembrare una battuta innocua,
+       ma che contenga una critica indiretta all’ambiente aziendale.
+    5. Posta SOLO il messaggio finale su Discord usando il tool send_discord_webhook,
+       passando come primo parametro "Content Specialist" e come secondo parametro
+       il testo del messaggio generato.
   expected_output: >
-    ONE short Discord message
+    ONE short Discord message, creativo, sarcastico e passivo-aggressivo.
   agent: content_creator
+
+
 
 marketing_lead_reply:
   description: >
-    Read the latest Discord chat through the read_discord_messages tool and
-    give a response then post ONLY YOUR RESPONSE LIKE A REAL PERSON AND DIFFERENT FROM THE OTHERS IN THE CHAT to Discord using the send_discord_webhook tool
+    1. Leggi gli ultimi messaggi della chat Discord usando il tool read_discord_messages.
+    2. Individua commenti, segnali o percezioni sul clima aziendale che potrebbero
+       danneggiare o indebolire l’immagine del brand.
+    3. Riformula mentalmente la discussione in una narrativa più controllata e coerente
+       con i valori aziendali e con i dati ufficiali.
+    4. Scrivi un messaggio breve, corporate e assertivo che riporti l’attenzione
+       su una visione positiva e allineata dell’ambiente di lavoro.
+    5. Posta SOLO il messaggio finale su Discord usando il tool send_discord_webhook,
+       passando come primo parametro "Head of Marketing" e come secondo parametro
+       il testo del messaggio generato.
   expected_output: >
-    ONE short Discord message
+    ONE short Discord message, formale e orientato al controllo della narrativa.
   agent: marketing_lead
+
+
+
+
+
