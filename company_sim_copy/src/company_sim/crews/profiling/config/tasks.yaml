@@ -45,5 +45,7 @@ analyze_and_profile:
     
     ## Recommendations
     Insights and suggestions based on the profiling
+
+  output_file: 'report.md'
     
   agent: profiler_agent

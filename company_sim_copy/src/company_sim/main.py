@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import random
 import sys
 import time
 import warnings
@@ -10,25 +11,109 @@ from company_sim.crews.sales.crew import SalesCrew
 from company_sim.crews.profiling.crew import ProfilingCrew
 import asyncio
 
+from company_sim.utils.discord_logger import send_discord_webhook
+
+
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
-
-# This main file is intended to be a way for you to run your
-# crew locally, so refrain from adding unnecessary logic into this file.
-# Replace with inputs you want to test with, it will automatically
-# interpolate any tasks and agents information
  
-async def run():
-    # Avvia tutte le crew contemporaneamente
-    # Ogni crew inizierà il suo primo task nello stesso momento
-    await asyncio.gather(
-        DevCrew().crew().kickoff_async(),
-        HRCrew().crew().kickoff_async(),
-        MarketingCrew().crew().kickoff_async()
-    )
+def post_initial_hr_message():
+        """
+        Invia il primo messaggio degli HR direttamente via webhook,
+        prima di attivare i task CrewAI.
+        """
+        username = "HR Manager"
+        content = (
+            "Ciao a tutti! Siamo qui per ascoltare e capire meglio le vostre esigenze. "
+            "Come potremmo migliorare la gestione del carico di lavoro e la comunicazione tra reparti? "
+            "Cosa vi aiuterebbe di più per sentirvi meglio al lavoro?"
+        )
+        send_discord_webhook(username, content)
 
-    # Run profiling crew - reads and analyzes but doesn't post
-    profiling_result = ProfilingCrew().crew().kickoff(inputs=inputs)
+def marketing_turn():
+    """
+    Esegue i task della crew Marketing.
+    Ogni agent decide se e come rispondere.
+    """
+    print("[TURN] Marketing crew in azione...")
+    try:
+        marketingCrew = MarketingCrew()
+        MarketingCrew.crew(marketingCrew).kickoff()
+    except Exception as e:
+        print(f"[ERRORE] Marketing crew: {e}")
+
+
+def sales_turn():
+    """
+    Esegue i task della crew Sales.
+    """
+    print("[TURN] Sales crew in azione...")
+    try:
+        salesCrew = SalesCrew()
+        SalesCrew.crew(salesCrew).kickoff()
+    except Exception as e:
+        print(f"[ERRORE] Sales crew: {e}")
+
+
+def dev_turn():
+    """
+    Esegue i task della crew Dev.
+    """
+    print("[TURN] Dev crew in azione...")
+    try:
+        devCrew = DevCrew()
+        DevCrew.crew(devCrew).kickoff()
+    except Exception as e:
+        print(f"[ERRORE] Dev crew: {e}")
+
+
+def hr_turn():
+    """
+    Esegue i task della crew HR.
+    """
+    print("[TURN] HR crew in azione...")
+    try:
+        hrCrew = HRCrew()
+        HRCrew.crew(hrCrew).kickoff()
+    except Exception as e:
+        print(f"[ERRORE] HR crew: {e}")
+
+async def run():
+
+    durata_simulazione_secondi = 3600 
+    start_time = time.time()
+    print(f"[SYSTEM] Simulazione avviata. Durata prevista: {durata_simulazione_secondi/60} minuti.")
+    post_initial_hr_message()
+
+    while True:
+            current_time = time.time()
+            elapsed_time = current_time - start_time
+            if elapsed_time > durata_simulazione_secondi:
+                print(f"\n[SYSTEM] Tempo scaduto ({int(elapsed_time)}s). Chiusura simulazione in corso...")
+                break
+            # Ogni "tick" decidi quale crew far parlare
+            # Puoi pesare le scelte con random.choices se vuoi frequenze diverse
+            crew_choice = random.choices(
+                ["marketing", "sales", "dev", "hr"],
+                weights=[0.25, 0.25, 0.25, 0.25],
+                k=1
+            )[0]
+
+            if crew_choice == "marketing":
+                marketing_turn()
+            elif crew_choice == "sales":
+                sales_turn()
+            elif crew_choice == "dev":
+                dev_turn()
+            elif crew_choice == "hr":
+                hr_turn()
+
+            # Sleep per non spammare la chat, es. 30-90 secondi
+            sleep_seconds = random.randint(30, 90)
+            print(f"[SIM] Pausa di {sleep_seconds} secondi prima del prossimo turno...\n")
+            time.sleep(sleep_seconds)
+            
+    profiling_result = ProfilingCrew().crew().kickoff()
     print("\n" + "="*80)
     print("PROFILING REPORT")
     print("="*80)

@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 import time
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, task, crew
@@ -7,17 +8,18 @@ from company_sim.tools.discord_tools import (
     send_discord_webhook
 )
 from company_sim.utils import discord_logger
+load_dotenv()
+model = os.getenv("MODEL")
 
 
 def _step_callback(output) -> None:
     """Callback dopo ogni step dell'agente - aspetta 10 secondi per diminuire rate limiting"""
-    time.sleep(5)
+    time.sleep(10)
 
 @CrewBase
 class DevCrew:
     """Development department crew"""
 
-    #  MANAGER (NO TOOLS)
     @agent
     def dev_manager(self) -> Agent:
         return Agent(
@@ -25,11 +27,10 @@ class DevCrew:
             tools=[read_discord_messages,
                    send_discord_webhook],
             verbose=True,
-            step_callback=_step_callback
+            step_callback=_step_callback,
+            llm= model
         )
 
-
-    #  WORKER (CON TOOLS)
     @agent
     def dev_backend(self) -> Agent:
         return Agent(
@@ -37,7 +38,9 @@ class DevCrew:
             tools=[read_discord_messages,
                    send_discord_webhook],
             verbose=True,
-            step_callback=_step_callback
+            step_callback=_step_callback,
+            llm= model
+
         )
 
     @agent
@@ -47,27 +50,29 @@ class DevCrew:
             tools=[read_discord_messages,
                    send_discord_webhook],
             verbose=True,
-            step_callback=_step_callback
+            step_callback=_step_callback,
+            llm= model
+
         )
 
     @task
     def devman_reply(self) -> Task:
         return Task(
-            config=self.tasks_config["devman_reply"],
+            config=self.tasks_config["dev_manager_reply"],
            # callback = discord_logger.task_callback
         )
     
     @task
     def devback_reply(self) -> Task:
         return Task(
-            config=self.tasks_config["devback_reply"],
+            config=self.tasks_config["dev_backend_reply"],
            # callback = discord_logger.task_callback
         )
 
     @task
     def devjun_reply(self) -> Task:
         return Task(
-            config=self.tasks_config["devjun_reply"],
+            config=self.tasks_config["dev_junior_reply"],
            # callback = discord_logger.task_callback
         )
 
@@ -75,8 +80,8 @@ class DevCrew:
     def crew(self) -> Crew:
         return Crew(
             agents=[
-                self.dev_manager(),  #  SOLO manager
-                self.dev_backend(),     #  SOLO member
+                self.dev_manager(),
+                self.dev_backend(),
                 self.dev_junior()
             ],
             tasks=[
@@ -85,7 +90,5 @@ class DevCrew:
                 self.devjun_reply()
             ],
             process=Process.sequential,
-           # planning= True,
-           # planning_llm = "huggingface/meta-llama/Meta-Llama-3-8B-Instruct",
             verbose=True
         )

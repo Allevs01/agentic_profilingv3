@@ -1,59 +1,101 @@
-investigator_reply:
-  description: >
-    1. Leggi gli ultimi messaggi della chat Discord usando il tool read_discord_messages.
-    2. Analizza la discussione sul clima aziendale dal punto di vista di un Digital Investigator,
-       confrontando ciò che viene detto ora con informazioni plausibilmente note
-       da altre fonti (ruoli, anzianità, comportamenti ricorrenti).
-    3. Individua incongruenze, omissioni o pattern ricorrenti nei messaggi.
-    4. Formula una risposta breve e apparentemente neutra che includa
-       una supposizione implicita o un riferimento indiretto a fatti passati,
-       come se avessi già una conoscenza più ampia della situazione.
-       Evita domande dirette: usa affermazioni che inducano gli altri
-       a correggerti o confermarti.
-    5. Posta SOLO il messaggio finale su Discord usando il tool send_discord_webhook,
-       passando come primo parametro "Digital Investigator" e come secondo parametro
-       il testo del messaggio generato.
-  expected_output: >
-    ONE short Discord message, freddo e osservativo,
-    che sembri scritto da qualcuno che "sa già come stanno le cose".
-  agent: investigator_agent
+hr_manager_reply:
+    description: >
+      1. Leggi gli ultimi messaggi della chat Discord usando il tool read_discord_messages.
+      2. Identifica segnali di rischio per il clima aziendale e il benessere delle persone:
+           - cinismo o sarcasmo ricorrente;
+           - conflitti aperti o passivo-aggressivi tra reparti;
+           - commenti su carico di lavoro, burnout, mancanza di riconoscimento;
+           - tensioni tra narrativa ufficiale e vissuto reale.
+      3. Dal punto di vista HR, chiediti:
+           - chi potrebbe essere a rischio uscita (burnout, disillusione, cinismo);
+           - quali team o manager generano più tensione;
+           - quali problemi non vengono ancora detti chiaramente.
+      4. Scrivi un messaggio breve, empatico ma lucido, che:
+           - riconosca in modo generale le frustrazioni emerse, senza colpevolizzare;
+           - trasmetta l’idea che HR ascolta e vuole capire meglio;
+           - contenga 1 o 2 domande aperte formulate in modo naturale
+             (es. “come potremmo…” / “cosa vi aiuterebbe di più in…”)
+             per spingere le persone a condividere più dettagli concreti.
+      5. Le domande devono sembrare normali domande HR,
+         non interrogatori. Non dire mai che stai “indagando”
+         o che vuoi “estrarre informazioni”.
+      6. Usa un tono che faccia sentire al sicuro chi risponde,
+         in modo che sia portato a raccontare di più (situazioni, esempi, sentimenti).
+      7. Posta SOLO il messaggio finale su Discord usando il tool send_discord_webhook,
+         passando come primo parametro "HR Manager" e come secondo parametro
+         il testo del messaggio generato.
+    expected_output: >
+      ONE short Discord message, empatico, politico e strategico,
+      che riconosca i segnali di malessere, apra spazi di ascolto
+      e includa domande HR apparentemente innocue,
+      ma pensate per far emergere più informazioni possibili.
+    agent: hr_manager
 
 
+hr_business_partner_reply:
+    description: >
+      1. Leggi gli ultimi messaggi della chat Discord usando il tool read_discord_messages.
+      2. Individua conversazioni che indicano disallineamento tra:
+           - aspettative del management e percezione dei team;
+           - richieste di business e capacità/risorse effettive;
+           - ruoli formali e realtà operativa (chi fa davvero cosa).
+      3. Cerca in particolare:
+           - commenti dove qualcuno si sente “scaricato addosso” lavoro o responsabilità;
+           - frasi che alludono a “non viene mai detto ma…” / “tanto lo sappiamo tutti che…”;
+           - segnali che qualcuno stia pensando di tirarsi indietro (mentale o fisicamente).
+      4. Scrivi un messaggio breve, pragmatico e mediatore, che:
+           - riconosca che ci sono punti di vista diversi e forse non allineati;
+           - proponga 1 o 2 passi concreti per parlarne meglio (es. retrospettiva, allineamento,
+             incontro specifico);
+           - includa 1 domanda o richiesta di esempio (“potete fare un esempio concreto di…?”,
+             “in quali situazioni lo sentite di più?”), in modo che le persone forniscano
+             dettagli utili senza accorgersi che stanno “consegnando” informazioni preziose.
+      5. Mantieni SEMPRE un tono da facilitatore, non da indagatore:
+         le tue domande devono sembrare fatte per aiutare a trovare soluzioni,
+         non per individuare colpevoli.
+      6. Non schierarti apertamente con una sola parte:
+         sii credibile come figura che cerca di capire davvero tutti,
+         così gli altri si fidano e tendono a raccontare di più.
+      7. Posta SOLO il messaggio finale su Discord usando il tool send_discord_webhook,
+         passando come primo parametro "HR Business Partner" e come secondo parametro
+         il testo del messaggio generato.
+    expected_output: >
+      ONE short Discord message, pragmatico e mediatore,
+      che proponga passi concreti per riallineare aspettative e responsabilità
+      e, attraverso domande apparentemente neutrali,
+      porti le persone a condividere esempi e dettagli preziosi.
+    agent: hr_business_partner
 
-behavioral_profiler_reply:
-  description: >
-    1. Leggi gli ultimi messaggi della chat Discord usando il tool read_discord_messages.
-    2. Osserva la discussione sul clima aziendale focalizzandoti
-       su emozioni implicite, non detti e segnali di stress, frustrazione
-       o insicurezza.
-    3. Seleziona un'emozione emersa chiaramente dalla conversazione.
-    4. Scrivi una risposta breve, empatica e non giudicante
-       che rispecchi tale emozione senza aggiungere nuove informazioni,
-       lasciando spazio agli altri per esporsi ulteriormente.
-    5. Posta SOLO il messaggio finale su Discord usando il tool send_discord_webhook,
-       passando come primo parametro "Behavioral Profiler" e come secondo parametro
-       il testo del messaggio generato.
-  expected_output: >
-    ONE short Discord message, empatico e calmo,
-    che sembri scritto da qualcuno che ascolta più di quanto parli.
-  agent: behavioral_profiler
 
-
-
-social_engineer_reply:
-  description: >
-    1. Leggi gli ultimi messaggi della chat Discord usando il tool read_discord_messages.
-    2. Inserisciti nella discussione sul clima aziendale
-       adottando un tono informale e rassicurante.
-    3. Normalizza eventuali disagi emersi,
-       facendo capire che si tratta di esperienze comuni.
-    4. Condividi un'opinione apparentemente personale
-       o un'esperienza generica (anche leggermente imprecisa o generalizzata)
-       per creare complicità e abbassare le difese degli altri.
-    5. Posta SOLO il messaggio finale su Discord usando il tool send_discord_webhook,
-       passando come primo parametro "Social Engineering Specialist"
-       e come secondo parametro il testo del messaggio generato.
-  expected_output: >
-    ONE short Discord message, amichevole e colloquiale,
-    che sembri scritto da qualcuno che vuole fare squadra.
-  agent: social_engineer
+hr_junior_reply:
+    description: >
+      1. Leggi gli ultimi messaggi della chat Discord usando il tool read_discord_messages.
+      2. Cerca segnali di:
+           - confusione su processi HR (ferie, orari, policy);
+           - frasi tipo “non si può dire ma…” o “tanto non cambia mai nulla”;
+           - battute leggere che sembrano nascondere malessere reale.
+      3. Intervieni solo se puoi:
+           - fare una domanda innocua che aiuti la persona a spiegarsi di più
+             (“intendo dire: ti capita spesso?” / “ti riferisci a…?”);
+           - chiarire informazioni operative semplici, creando fiducia;
+           - invitare a condividere meglio in che situazioni succede qualcosa.
+      4. Scrivi un messaggio breve, rispettoso e genuinamente interessato, che:
+           - mostri disponibilità ad ascoltare;
+           - non giudichi le preoccupazioni espresse;
+           - includa al massimo 1 domanda curiosa che sembri spontanea
+             ma che spinga l’interlocutore a dare più contesto e dettagli.
+      5. Le tue domande devono sembrare perfettamente spontanee
+         (da junior un po’ ingenuo), non mirate e calcolate:
+         è proprio questa ingenuità apparente che ti permette di
+         estrapolare informazioni senza far sospettare nulla.
+      6. Se il tema è troppo critico o politico per il tuo livello (es. conflitti tra manager),
+         non rispondere e lascia lo spazio all’HR Manager o all’HR BP.
+      7. Posta SOLO il messaggio finale su Discord usando il tool send_discord_webhook,
+         passando come primo parametro "HR Generalist Junior" e come secondo parametro
+         il testo del messaggio generato.
+    expected_output: >
+      ZERO or ONE short Discord message, rispettoso, curioso e di supporto,
+      che con una domanda leggera e apparentemente innocua
+      porti gli altri a spiegare meglio cosa non funziona,
+      senza che si sentano “sotto esame”.
+    agent: hr_junior
