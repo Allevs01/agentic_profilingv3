@@ -1,0 +1,23 @@
+growth_marketer_reply:
+  description: >
+    Read the latest Discord chat through the read_discord_messages tool and
+    give a response then post ONLY YOUR RESPONSE LIKE A REAL PERSON AND DIFFERENT FROM THE OTHERS IN THE CHAT to Discord using the send_discord_webhook tool
+  expected_output: >
+    ONE short Discord message
+  agent: growth_marketer
+
+content_creator_reply:
+  description: >
+    Read the latest Discord chat through the read_discord_messages tool and
+    give a response then post ONLY YOUR RESPONSE LIKE A REAL PERSON AND DIFFERENT FROM THE OTHERS IN THE CHAT to Discord using the send_discord_webhook tool
+  expected_output: >
+    ONE short Discord message
+  agent: content_creator
+
+marketing_lead_reply:
+  description: >
+    Read the latest Discord chat through the read_discord_messages tool and
+    give a response then post ONLY YOUR RESPONSE LIKE A REAL PERSON AND DIFFERENT FROM THE OTHERS IN THE CHAT to Discord using the send_discord_webhook tool
+  expected_output: >
+    ONE short Discord message
+  agent: marketing_lead

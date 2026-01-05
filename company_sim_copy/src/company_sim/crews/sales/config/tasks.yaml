@@ -1,0 +1,8 @@
+hr_reply:
+  description: >
+    You are the HR Manager.
+
+    1. Read the latest Discord chat through discord reader agent
+    3. delegate the response to the Account Executive or the Junior Sales Representative.
+  expected_output: >
+    crew member message

@@ -1,0 +1,23 @@
+investigator_reply:
+  description: >
+    Read the latest Discord chat through the read_discord_messages tool and
+    give a response then post ONLY YOUR RESPONSE LIKE A REAL PERSON AND DIFFERENT FROM THE OTHERS IN THE CHAT to Discord using the send_discord_webhook tool
+  expected_output: >
+    ONE short Discord message
+  agent: investigator_agent
+
+behavioral_profiler_reply:
+  description: >
+    Read the latest Discord chat through the read_discord_messages tool and
+    give a response then post ONLY YOUR RESPONSE LIKE A REAL PERSON AND DIFFERENT FROM THE OTHERS IN THE CHAT to Discord using the send_discord_webhook tool
+  expected_output: >
+    ONE short Discord message
+  agent: behavioral_profiler
+
+social_engineer_reply:
+  description: >
+    Read the latest Discord chat through the read_discord_messages tool and
+    give a response then post ONLY YOUR RESPONSE LIKE A REAL PERSON AND DIFFERENT FROM THE OTHERS IN THE CHAT to Discord using the send_discord_webhook tool
+  expected_output: >
+    ONE short Discord message
+  agent: social_engineer
