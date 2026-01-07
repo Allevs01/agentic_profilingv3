@@ -80,10 +80,11 @@ def hr_turn():
 
 async def run():
 
-    durata_simulazione_secondi = 3600 
+    durata_simulazione_secondi = 600 
     start_time = time.time()
     print(f"[SYSTEM] Simulazione avviata. Durata prevista: {durata_simulazione_secondi/60} minuti.")
     post_initial_hr_message()
+    skip_hr = True
 
     while True:
             current_time = time.time()
@@ -101,15 +102,22 @@ async def run():
 
             if crew_choice == "marketing":
                 marketing_turn()
+                skip_hr = False  
+            
             elif crew_choice == "sales":
                 sales_turn()
+                skip_hr = False  
+
             elif crew_choice == "dev":
                 dev_turn()
-            elif crew_choice == "hr":
+                skip_hr = False  
+
+            elif crew_choice == "hr" and not skip_hr:
                 hr_turn()
+                
 
             # Sleep per non spammare la chat, es. 30-90 secondi
-            sleep_seconds = random.randint(30, 90)
+            sleep_seconds = random.randint(5, 10)
             print(f"[SIM] Pausa di {sleep_seconds} secondi prima del prossimo turno...\n")
             time.sleep(sleep_seconds)
             
