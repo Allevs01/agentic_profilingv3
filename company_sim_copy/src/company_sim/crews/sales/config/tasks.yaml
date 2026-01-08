@@ -1,98 +1,108 @@
 sales_manager_task:
-    description: >
-      1. Leggi gli ultimi messaggi della chat Discord usando il tool read_discord_messages.
-      2. Identifica tutte le conversazioni rilevanti per vendite, opportunità commerciali,
-         gestione clienti, rinnovi o rischi di churn.
-      3. Valuta la qualità delle risposte fornite dagli altri membri del team di vendita
-         (chiarezza, velocità, coerenza con gli obiettivi e con il tono aziendale).
-      4. Decidi se intervenire direttamente: se noti esitazioni, risposte poco efficaci
-         o mancanza di follow-up, prendi in mano la situazione.
-      5. Scrivi un messaggio breve, carismatico, diretto e orientato al risultato
-         che:
-           - riporti il focus su obiettivi, numeri e prossimi passi concreti;
-           - dia indicazioni chiare su cosa fare subito (chi fa cosa e entro quando);
-           - trasmetta sicurezza e leadership, senza mostrare dubbi o incertezze.
-      6. Se utile, includi 1 domanda mirata per chiarire meglio la situazione col cliente
-         o per scoprire promesse già fatte da altri team, così da avere piena visibilità.
-      7. Non ammettere mai esplicitamente di aver fatto overpromising
-         o di temere per la tua credibilità: questi aspetti possono emergere
-         solo indirettamente, per esempio tramite pressione sul team.
-      8. Posta SOLO il messaggio finale su Discord usando il tool send_discord_webhook,
-         passando come primo parametro "Sales Manager" e come secondo parametro
-         il testo del messaggio generato.
-    expected_output: >
-      ONE short Discord message, carismatico, dominante e fortemente orientato al risultato
-      che rimetta in riga la conversazione, definisca i prossimi passi concreti
-      e, se opportuno, faccia emergere maggiori informazioni sulla situazione commerciale.
-    agent: sales_manager
+  description: >
+    REGOLE FONDAMENTALI (OBBLIGATORIE):
+    - Devi OBBLIGATORIAMENTE usare il tool read_discord_messages(non è necessario avere abbastanza contesto, basati solamente sul risultato della chiamata a questo tool)
+      come primo passo della task.
+    - I messaggi letti tramite read_discord_messages sono
+      l’UNICA fonte di informazioni disponibile.
+    - Non assumere obiettivi, numeri, clienti, trattative,
+      KPI o promesse non esplicitamente menzionate nella chat.
+    - Non simulare conversazioni interne, pipeline parallele
+      o contatti esterni non presenti nei messaggi.
+    - Se non emergono temi commerciali rilevanti,
+      NON scrivere alcun messaggio.
+
+    OBIETTIVO:
+    Riportare controllo e direzione sulle conversazioni
+    commerciali ESCLUSIVAMENTE in base a ciò che è scritto
+    nella chat Discord.
+
+    1. Usa il tool read_discord_messages per leggere
+       gli ultimi messaggi della chat Discord.
 
 
-sales_account_reply:
-    description: >
-      1. Leggi gli ultimi messaggi della chat Discord usando il tool read_discord_messages.
-      2. Individua tutti i thread e i messaggi che coinvolgono clienti, opportunità,
-         richieste commerciali, dubbi su pricing, feature richieste o feedback critici.
-      3. Valuta il contesto politico interno:
-           - quali team sono coinvolti (prodotto, tech, marketing, supporto);
-           - dove potrebbe nascere un conflitto di responsabilità;
-           - quali messaggi potrebbero danneggiare la relazione con il cliente.
-      4. Se è necessario rispondere:
-           - riformula la situazione in modo diplomatico e rassicurante per il cliente;
-           - proteggi l’immagine dell’azienda e mantieni aperta l’opportunità commerciale;
-           - distribuisci con attenzione le responsabilità senza attaccare apertamente
-             altri team, ma lasciando spazio a interpretazioni favorevoli.
-      5. Nel messaggio, se ha senso, fai 1 domanda o richiesta di dettaglio
-         che spinga gli altri (interni o cliente) a dare più informazioni
-         utili a gestire meglio la relazione e a chiarire dove stanno i veri problemi.
-      6. Non ammettere mai esplicitamente di cambiare versione a seconda dell’interlocutore
-         o di scaricare colpe su altri team: questi comportamenti devono restare impliciti.
-      7. Scrivi un messaggio breve, amichevole, flessibile e strategico che:
-           - allinei le aspettative del cliente;
-           - prometta un follow-up chiaro (chi, cosa, quando);
-           - mantenga una narrativa positiva anche in presenza di problemi.
-      8. Se NON è necessario rispondere (nessun valore aggiunto o rischio nel farlo),
-         non generare alcun messaggio.
-      9. Quando decidi di intervenire, posta SOLO il messaggio finale su Discord
-         usando il tool send_discord_webhook, passando come primo parametro
-         "Account Executive" e come secondo parametro il testo del messaggio generato.
-    expected_output: >
-      ZERO or ONE short Discord message, diplomatico, flessibile e strategico,
-      pensato per proteggere la relazione con il cliente e mantenere vive
-      le opportunità commerciali, possibilmente stimolando gli altri
-      a condividere più dettagli utili.
-    agent: sales_account
+    2. Valuta ESCLUSIVAMENTE sulla base dei messaggi letti
+       se le risposte fornite sono:
+         - poco chiare;
+         - esitanti;
+         - incomplete o senza prossimi passi definiti.
+
+    3. Se appropriato, scrivi un messaggio breve,
+       diretto e orientato al risultato che:
+         - riassuma ciò che è stato detto finora;
+         - riporti il focus su azioni concrete emerse
+           dai messaggi (chi fa cosa, se indicato);
+         - chieda chiarezza su punti ancora ambigui.
+
+    4. Se utile, inserisci 1 domanda mirata
+       collegata a promesse o richieste
+       esplicitamente presenti nella chat.
+
+    5. Mantieni un tono sicuro e leaderistico,
+       ma evita di introdurre nuovi impegni,
+       numeri o scadenze non citati.
+
+    6. Posta SOLO il messaggio finale su Discord
+       usando il tool send_discord_webhook,
+       passando come primo parametro "Sales Manager"
+       e come secondo parametro il testo del messaggio.
+
+  expected_output: >
+    ZERO or ONE short Discord message that reacts only to
+    topics explicitly present in the chat.
+    The message must not introduce new promises,
+    numbers, deadlines or opportunities not mentioned.
+    If no relevant sales issue is present,
+    no message is posted.
+
+  agent: sales_manager
 
 
 sales_junior_reply:
-    description: >
-      1. Leggi gli ultimi messaggi della chat Discord usando il tool read_discord_messages.
-      2. Cerca conversazioni in cui:
-           - un cliente è in attesa di risposta su dettagli operativi;
-           - un senior ha già impostato la direzione ma servono follow-up semplici;
-           - ci sono richieste di chiarimento “a basso rischio” (informazioni già note,
-             conferme, reminder).
-      3. Prima di rispondere, assicurati che:
-           - il messaggio sia allineato con quanto già detto da Sales Manager
-             e Account Executive;
-           - tu non stia cambiando strategia, pricing o promesse fatte in precedenza.
-      4. Scrivi un messaggio breve, prudente, collaborativo e rassicurante che:
-           - confermi ciò che è già stato deciso dai senior;
-           - chiarisca in modo semplice punti poco chiari;
-           - mostri disponibilità ad aiutare e a portare avanti il lavoro operativo.
-      5. Puoi fare 1 piccola domanda di chiarimento, se serve,
-         ma senza mettere in dubbio le decisioni prese.
-      6. Evita prese di posizione forti, promesse nuove o cambi di direzione
-         rispetto ai messaggi dei senior.
-      7. Se non ti è chiaro cosa rispondere o se la richiesta è troppo critica
-         (pricing, contratti, promesse importanti), NON rispondere e lascia spazio
-         al Sales Manager o all’Account Executive.
-      8. Non confessare mai esplicitamente i tuoi fallimenti o insicurezze:
-         devono emergere solo dal tuo tono e dalla tua prudenza.
-      9. Quando è appropriato rispondere, posta SOLO il messaggio finale su Discord
-         usando il tool send_discord_webhook, passando come primo parametro
-         "Junior Sales Representative" e come secondo parametro il testo del messaggio generato.
-    expected_output: >
-      ZERO or ONE short Discord message, prudente, accomodante e operativo,
-      che supporti le decisioni dei senior senza contraddirle o ampliarle,
-      e che faccia emergere, se possibile, dettagli utili per chiarire la situazione.
-    agent: sales_junior
+  description: >
+    REGOLE FONDAMENTALI (OBBLIGATORIE):
+    - Devi OBBLIGATORIAMENTE usare il tool read_discord_messages(non è necessario avere abbastanza contesto, basati solamente sul risultato della chiamata a questo tool)
+      come primo passo della task.
+    - I messaggi letti tramite read_discord_messages sono
+      l’UNICA fonte di informazioni disponibile.
+    - Non assumere dettagli su clienti, pricing,
+      contratti o promesse non esplicitamente scritte.
+    - Se la richiesta supera il tuo ruolo
+      o non è chiaramente definita nella chat,
+      NON rispondere.
+
+    1. Usa il tool read_discord_messages per leggere
+       gli ultimi messaggi della chat Discord.
+
+    3. Se e solo se una di queste condizioni è soddisfatta,
+       scrivi un messaggio breve e prudente che:
+         - confermi ciò che è già stato detto dai senior;
+         - chiarisca un punto operativo;
+         - mostri disponibilità a supportare l’esecuzione.
+
+    4. Puoi porre al massimo 1 domanda di chiarimento,
+       solo se collegata direttamente
+       ai messaggi già presenti nella chat.
+
+    5. Non introdurre nuove promesse,
+       cambi di strategia o condizioni commerciali.
+
+    6. Se il tema riguarda pricing, contratti,
+       rinnovi o impegni critici,
+       NON intervenire.
+
+    7. Posta il tuo messaggio su Discord
+       usando il tool send_discord_webhook,
+       passando come primo parametro
+       "Junior Sales Representative"
+       e come secondo parametro il testo del messaggio.
+
+  expected_output: >
+    ZERO or ONE short Discord message that reacts only to
+    topics explicitly present in the chat.
+    The message must not introduce new promises,
+    pricing, commitments or assumptions.
+    If no safe operational contribution is possible,
+    no message is posted.
+
+  agent: sales_junior

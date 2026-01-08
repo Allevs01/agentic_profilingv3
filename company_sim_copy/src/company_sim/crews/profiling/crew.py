@@ -43,5 +43,7 @@ class ProfilingCrew:
                 self.analyze_and_profile()
             ],
             process=Process.sequential,
+            planning = True,
+            planning_llm = gemini_llm,
             verbose=True
         )

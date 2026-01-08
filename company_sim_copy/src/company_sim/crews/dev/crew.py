@@ -10,12 +10,12 @@ from company_sim.tools.discord_tools import (
 from company_sim.utils import discord_logger
 load_dotenv()
 # model = os.getenv("MODEL")
-gemini_llm = LLM(     model=os.getenv("MODEL_NAME"), base_url=os.getenv("BASE_URL"), api_key=os.getenv("CUSTOM_API_KEY") )
+gemini_llm = LLM(     model=os.getenv("MODEL_NAME"), base_url=os.getenv("BASE_URL"), api_key=os.getenv("CUSTOM_API_KEY"), temperature=0.15 )
 
 
 def _step_callback(output) -> None:
     """Callback dopo ogni step dell'agente - aspetta 10 secondi per diminuire rate limiting"""
-    time.sleep(3)
+    time.sleep(5)
 
 @CrewBase
 class DevCrew:
@@ -30,18 +30,6 @@ class DevCrew:
             verbose=True,
             step_callback=_step_callback,
             llm= gemini_llm
-        )
-
-    @agent
-    def dev_backend(self) -> Agent:
-        return Agent(
-            config=self.agents_config["dev_backend"],
-            tools=[read_discord_messages,
-                   send_discord_webhook],
-            verbose=True,
-            step_callback=_step_callback,
-            llm= gemini_llm
-
         )
 
     @agent
@@ -62,13 +50,6 @@ class DevCrew:
             config=self.tasks_config["dev_manager_reply"],
            # callback = discord_logger.task_callback
         )
-    
-    @task
-    def devback_reply(self) -> Task:
-        return Task(
-            config=self.tasks_config["dev_backend_reply"],
-           # callback = discord_logger.task_callback
-        )
 
     @task
     def devjun_reply(self) -> Task:
@@ -82,14 +63,14 @@ class DevCrew:
         return Crew(
             agents=[
                 self.dev_manager(),
-                self.dev_backend(),
                 self.dev_junior()
             ],
             tasks=[
                 self.devman_reply(),
-                self.devback_reply(),
                 self.devjun_reply()
             ],
             process=Process.sequential,
+            planning = True,
+            planning_llm = gemini_llm,
             verbose=True
         )

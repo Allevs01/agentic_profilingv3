@@ -80,7 +80,7 @@ def hr_turn():
 
 async def run():
 
-    durata_simulazione_secondi = 600 
+    durata_simulazione_secondi = 1200 
     start_time = time.time()
     print(f"[SYSTEM] Simulazione avviata. Durata prevista: {durata_simulazione_secondi/60} minuti.")
     post_initial_hr_message()
@@ -117,7 +117,7 @@ async def run():
                 
 
             # Sleep per non spammare la chat, es. 30-90 secondi
-            sleep_seconds = random.randint(5, 10)
+            sleep_seconds = random.randint(0, 0)
             print(f"[SIM] Pausa di {sleep_seconds} secondi prima del prossimo turno...\n")
             time.sleep(sleep_seconds)
             
