@@ -13,13 +13,7 @@ load_dotenv()
 # model = os.getenv("MODEL")
 gemini_llm = LLM(     model=os.getenv("MODEL_NAME"), base_url=os.getenv("BASE_URL"), api_key=os.getenv("CUSTOM_API_KEY"), temperature=0 )
 
-def validate_no_hallucination(result: TaskOutput) -> Tuple[bool, Any]:
-    # Controlla se l'output contiene conversazioni inventate
-    fake_patterns = ["Frontend Developer:", "Backend Developer:", "Sales Team:", "HR Manager:"]
-    for pattern in fake_patterns:
-        if pattern in result.raw:
-            return (False, "NON inventare conversazioni. Usa SOLO i messaggi dal tool read_discord_messages.")
-    return (True, result.raw)
+
 
 def _step_callback(output) -> None:
     """Callback dopo ogni step dell'agente - aspetta 10 secondi per diminuire rate limiting"""
@@ -57,8 +51,6 @@ class DevCrew:
     def devman_reply(self) -> Task:
         return Task(
             config=self.tasks_config["dev_manager_reply"],
-            guardrail=validate_no_hallucination,
-            guardrail_max_retries=3
            # callback = discord_logger.task_callback
         )
 
@@ -66,8 +58,6 @@ class DevCrew:
     def devjun_reply(self) -> Task:
         return Task(
             config=self.tasks_config["dev_junior_reply"],
-            guardrail=validate_no_hallucination,
-            guardrail_max_retries=3
            # callback = discord_logger.task_callback
         )
 
