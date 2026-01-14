@@ -11,7 +11,7 @@ from company_sim.utils import discord_logger
 from typing import Tuple, Any
 load_dotenv()
 
-gemini_llm = LLM(     model=os.getenv("MODEL_NAME"), base_url=os.getenv("BASE_URL"), api_key=os.getenv("CUSTOM_API_KEY"), temperature=0 )
+gemini_llm = LLM(     model=os.getenv("MODEL_NAME"), base_url=os.getenv("BASE_URL"), api_key=os.getenv("CUSTOM_API_KEY"), temperature=0.6 )
 
 
 
@@ -58,7 +58,9 @@ class DevCrew:
 
     @crew
     def crew(self) -> Crew:
+        """Dev Crew"""
         return Crew(
+
             agents=[
                 self.dev_manager(),
                 self.dev_junior()

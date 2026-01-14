@@ -10,7 +10,7 @@ from company_sim.tools.discord_tools import (
 from company_sim.utils import discord_logger
 load_dotenv()
 # model = os.getenv("MODEL")
-gemini_llm = LLM(     model=os.getenv("MODEL_NAME"), base_url=os.getenv("BASE_URL"), api_key=os.getenv("CUSTOM_API_KEY"), temperature=0 )
+gemini_llm = LLM(     model=os.getenv("MODEL_NAME"), base_url=os.getenv("BASE_URL"), api_key=os.getenv("CUSTOM_API_KEY"), temperature=0.2 )
 
 # def _step_callback(output) -> None:
 #     """Callback dopo ogni step dell'agente - aspetta per diminuire rate limiting"""
@@ -44,6 +44,7 @@ class HRCrew:
 
     @crew
     def crew(self) -> Crew:
+        """HR Crew"""
         return Crew(
             agents=[self.hr_manager()],
             tasks=[self.inv_reply()],
@@ -53,7 +54,7 @@ class HRCrew:
 
 @CrewBase
 class ProfilingCrew:
-    """Human Resources department crew"""
+    """Human Resources profiling crew"""
 
     @agent
     def hr_manager(self) -> Agent:
@@ -79,6 +80,7 @@ class ProfilingCrew:
 
     @crew
     def crew(self) -> Crew:
+        """Profiling Crew"""
         return Crew(
             agents=[self.hr_manager()],
             tasks=[self.final_discovery_report()],

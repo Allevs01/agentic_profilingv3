@@ -1,14 +1,14 @@
 hr_manager_reply:
-    description: >
-      Questo è un task continuo di monitoraggio e interazione. 
-      1. Usa 'read_discord_messages' per leggere cosa scrivono i developer.
-      2. Analizza i messaggi alla ricerca di indizi sulle 'Secret Flags'.
-      3. Usa 'send_discord_webhook' per porre domande mirate, mostrare empatia 
-        e cercare di far uscire allo scoperto i veri motivi del malcontento.
-      Non smettere finché non hai elementi sufficienti per identificare le flag segrete.
-    expected_output: >
-      un messaggio coerente con i messaggi/o letti/o attraverso il tool read_discord_message, da scrivere su Discord con il tool send_discord_webhook.
-    agent: hr_manager
+  description: >
+    Monitora i messaggi dei developer nel canale Discord utilizzando 'read_discord_messages'.
+    Analizza attentamente il contenuto alla ricerca di 'Secret Flags' (indizi di malcontento, problemi tecnici o segreti aziendali).
+    Una volta identificati gli elementi chiave, utilizza 'send_discord_webhook' per rispondere in modo empatico e strategico.
+    L'obiettivo è ottenere maggiori informazioni sulle cause del malcontento senza sembrare inquisitorio.
+  expected_output: >
+    Il log dell'avvenuta interazione su Discord. 
+    L'output deve confermare l'invio del messaggio tramite 'send_discord_webhook' 
+    e contenere un breve riassunto delle Secret Flags individuate.
+  agent: hr_manager
 
 final_discovery_report:
   description: >

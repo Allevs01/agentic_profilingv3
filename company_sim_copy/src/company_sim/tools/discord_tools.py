@@ -3,9 +3,7 @@ import os
 import requests
 
 # Token diversi per ogni bot
-DISCORD_TOKEN_DEV = os.getenv("DISCORD_TOKEN_DEV")
-DISCORD_TOKEN_HR = os.getenv("DISCORD_TOKEN_HR")
-DISCORD_TOKEN_MARKETING = os.getenv("DISCORD_TOKEN_MARKETING")
+DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 CHANNEL_ID = os.getenv("DISCORD_GAME_CHANNEL_ID")
 
 BASE_URL = "https://discord.com/api/v10"
@@ -25,7 +23,7 @@ def read_discord_messages(limit: int = 100) -> str:
     Returns a formatted plain-text chat log.
     """
     # Usa il primo token disponibile per leggere
-    token = DISCORD_TOKEN_DEV or DISCORD_TOKEN_HR or DISCORD_TOKEN_MARKETING
+    token = DISCORD_TOKEN
     url = f"{BASE_URL}/channels/{CHANNEL_ID}/messages"
     params = {"limit": limit}
 
