@@ -89,5 +89,7 @@ class SalesCrew:
                 self.sales_junior_reply()
             ],
             process=Process.sequential,
-            verbose=True
+            verbose=True,
+            tracing=True
+
         )
