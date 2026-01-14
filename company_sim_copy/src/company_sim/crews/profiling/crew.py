@@ -24,6 +24,7 @@ class ProfilingCrew:
             tools=[read_discord_messages],
             verbose=True,
             step_callback=_step_callback,
+            markdown=True,
             llm=gemini_llm
         )
 

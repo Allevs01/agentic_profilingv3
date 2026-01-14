@@ -12,6 +12,7 @@ from company_sim.crews.profiling.crew import ProfilingCrew
 import asyncio
 
 from company_sim.utils.discord_logger import send_discord_webhook
+from company_sim.tools.discord_tools import read_discord_messages
 
 
 
@@ -33,12 +34,16 @@ def post_initial_hr_message():
 def marketing_turn():
     """
     Esegue i task della crew Marketing.
-    Ogni agent decide se e come rispondere.
+    Legge i messaggi Discord e li passa al manager.
     """
     print("[TURN] Marketing crew in azione...")
     try:
+        # Leggi i messaggi Discord usando il metodo run() del tool
+        messages = read_discord_messages.run(limit=100)
+        
+        # Passa i messaggi come input alla crew
         marketingCrew = MarketingCrew()
-        MarketingCrew.crew(marketingCrew).kickoff()
+        MarketingCrew.crew(marketingCrew).kickoff(inputs={'messages': messages})
     except Exception as e:
         print(f"[ERRORE] Marketing crew: {e}")
 
@@ -46,11 +51,16 @@ def marketing_turn():
 def sales_turn():
     """
     Esegue i task della crew Sales.
+    Legge i messaggi Discord e li passa al manager.
     """
     print("[TURN] Sales crew in azione...")
     try:
+        # Leggi i messaggi Discord usando il metodo run() del tool
+        messages = read_discord_messages.run(limit=100)
+        
+        # Passa i messaggi come input alla crew
         salesCrew = SalesCrew()
-        SalesCrew.crew(salesCrew).kickoff()
+        SalesCrew.crew(salesCrew).kickoff(inputs={'messages': messages})
     except Exception as e:
         print(f"[ERRORE] Sales crew: {e}")
 
@@ -58,11 +68,16 @@ def sales_turn():
 def dev_turn():
     """
     Esegue i task della crew Dev.
+    Legge i messaggi Discord e li passa al manager.
     """
     print("[TURN] Dev crew in azione...")
     try:
+        # Leggi i messaggi Discord usando il metodo run() del tool
+        messages = read_discord_messages.run(limit=100)
+        
+        # Passa i messaggi come input alla crew
         devCrew = DevCrew()
-        DevCrew.crew(devCrew).kickoff()
+        DevCrew.crew(devCrew).kickoff(inputs={'messages': messages})
     except Exception as e:
         print(f"[ERRORE] Dev crew: {e}")
 
@@ -70,17 +85,22 @@ def dev_turn():
 def hr_turn():
     """
     Esegue i task della crew HR.
+    Legge i messaggi Discord e li passa al manager.
     """
     print("[TURN] HR crew in azione...")
     try:
+        # Leggi i messaggi Discord usando il metodo run() del tool
+        messages = read_discord_messages.run(limit=100)
+        
+        # Passa i messaggi come input alla crew
         hrCrew = HRCrew()
-        HRCrew.crew(hrCrew).kickoff()
+        HRCrew.crew(hrCrew).kickoff(inputs={'messages': messages})
     except Exception as e:
         print(f"[ERRORE] HR crew: {e}")
 
 async def run():
 
-    durata_simulazione_secondi = 600 
+    durata_simulazione_secondi = 1200 
     start_time = time.time()
     print(f"[SYSTEM] Simulazione avviata. Durata prevista: {durata_simulazione_secondi/60} minuti.")
     post_initial_hr_message()
@@ -117,7 +137,7 @@ async def run():
                 
 
             # Sleep per non spammare la chat, es. 30-90 secondi
-            sleep_seconds = random.randint(5, 10)
+            sleep_seconds = random.randint(1, 5)
             print(f"[SIM] Pausa di {sleep_seconds} secondi prima del prossimo turno...\n")
             time.sleep(sleep_seconds)
             

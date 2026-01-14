@@ -18,7 +18,7 @@ def _headers(token):
     }
 
 
-@tool
+@tool("read_discord_messages", result_as_answer=True)
 def read_discord_messages(limit: int = 100) -> str:
     """
     Reads the latest messages from the Discord channel.
@@ -93,7 +93,7 @@ def post_to_discord(message: str) -> str:
     return post_to_discord_dev(message)
 
 
-@tool
+@tool("send_discord_webhook", result_as_answer=True)
 def send_discord_webhook(username: str, content: str) -> str:
     """
     Sends a message to Discord using a webhook.
