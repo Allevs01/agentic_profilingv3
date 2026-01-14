@@ -2,8 +2,7 @@ import discord
 from discord.ext import commands
  
 # ====== CONFIG ======
-TOKEN = "MTQ1NjkyOTcyMDg3MTQyMDAzOQ.GFSxZH.N4IMKPoJEgaM8_ch23RRR5J3L9RKvTFjvDgKeA"
-CHANNEL_ID = 1442860143061762152  # ID del canale
+
 # ====================
  
 intents = discord.Intents.default()

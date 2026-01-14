@@ -6,8 +6,6 @@ import warnings
 from datetime import datetime
 from company_sim.crews.dev.crew import DevCrew
 from company_sim.crews.hr.crew import HRCrew
-from company_sim.crews.marketing.crew import MarketingCrew
-from company_sim.crews.sales.crew import SalesCrew
 from company_sim.crews.profiling.crew import ProfilingCrew
 import asyncio
 
@@ -29,31 +27,6 @@ def post_initial_hr_message():
             "Cosa vi aiuterebbe di più per sentirvi meglio al lavoro?"
         )
         send_discord_webhook(username, content)
-
-def marketing_turn():
-    """
-    Esegue i task della crew Marketing.
-    Ogni agent decide se e come rispondere.
-    """
-    print("[TURN] Marketing crew in azione...")
-    try:
-        marketingCrew = MarketingCrew()
-        MarketingCrew.crew(marketingCrew).kickoff()
-    except Exception as e:
-        print(f"[ERRORE] Marketing crew: {e}")
-
-
-def sales_turn():
-    """
-    Esegue i task della crew Sales.
-    """
-    print("[TURN] Sales crew in azione...")
-    try:
-        salesCrew = SalesCrew()
-        SalesCrew.crew(salesCrew).kickoff()
-    except Exception as e:
-        print(f"[ERRORE] Sales crew: {e}")
-
 
 def dev_turn():
     """
@@ -94,26 +67,12 @@ async def run():
                 break
             # Ogni "tick" decidi quale crew far parlare
             # Puoi pesare le scelte con random.choices se vuoi frequenze diverse
-            crew_choice = random.choices(
-                ["marketing", "sales", "dev", "hr"],
-                weights=[0.25, 0.25, 0.25, 0.25],
-                k=1
-            )[0]
-
-            if crew_choice == "marketing":
-                marketing_turn()
-                skip_hr = False  
             
-            elif crew_choice == "sales":
-                sales_turn()
-                skip_hr = False  
+            dev_turn()
 
-            elif crew_choice == "dev":
-                dev_turn()
-                skip_hr = False  
+            hr_turn()
 
-            elif crew_choice == "hr" and not skip_hr:
-                hr_turn()
+
                 
 
             # Sleep per non spammare la chat, es. 30-90 secondi
