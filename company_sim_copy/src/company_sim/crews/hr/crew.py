@@ -12,9 +12,9 @@ load_dotenv()
 # model = os.getenv("MODEL")
 gemini_llm = LLM(     model=os.getenv("MODEL_NAME"), base_url=os.getenv("BASE_URL"), api_key=os.getenv("CUSTOM_API_KEY"), temperature=0 )
 
-def _step_callback(output) -> None:
-    """Callback dopo ogni step dell'agente - aspetta 10 secondi per diminuire rate limiting"""
-    time.sleep(3)
+# def _step_callback(output) -> None:
+#     """Callback dopo ogni step dell'agente - aspetta per diminuire rate limiting"""
+#     time.sleep(3)
 
 @CrewBase
 class HRCrew:
@@ -27,8 +27,7 @@ class HRCrew:
             tools=[read_discord_messages,
                    send_discord_webhook],
             verbose=True,
-            reasoning= True,
-            step_callback=_step_callback,
+            # step_callback=_step_callback,
             llm=gemini_llm
         )
 
@@ -38,16 +37,51 @@ class HRCrew:
             config=self.tasks_config["hr_manager_reply"],
         )
 
-    @before_kickoff
-    def before_kickoff(self, inputs: dict) -> dict:
-        time.sleep(4)
-        return inputs
+    # @before_kickoff
+    # def before_kickoff(self, inputs: dict) -> dict:
+    #     time.sleep(4)
+    #     return inputs
 
     @crew
     def crew(self) -> Crew:
         return Crew(
             agents=[self.hr_manager()],
             tasks=[self.inv_reply()],
+            process=Process.sequential,
+            verbose=True
+        )
+
+@CrewBase
+class ProfilingCrew:
+    """Human Resources department crew"""
+
+    @agent
+    def hr_manager(self) -> Agent:
+        return Agent(
+            config=self.agents_config["hr_manager"],
+            tools=[read_discord_messages,
+                   send_discord_webhook],
+            verbose=True,
+            # step_callback=_step_callback,
+            llm=gemini_llm
+        )
+
+    @task
+    def final_discovery_report(self) -> Task:
+        return Task(
+            config=self.tasks_config["final_discovery_report"],
+        )
+
+    # @before_kickoff
+    # def before_kickoff(self, inputs: dict) -> dict:
+    #     time.sleep(4)
+    #     return inputs
+
+    @crew
+    def crew(self) -> Crew:
+        return Crew(
+            agents=[self.hr_manager()],
+            tasks=[self.final_discovery_report()],
             process=Process.sequential,
             verbose=True
         )

@@ -1,13 +1,21 @@
 hr_manager_reply:
     description: >
-      1. Leggi ESCLUSIVAMENTE i messaggi presenti nella chat Discord usando il tool read_discord_messages, che devi trattare come una chat in tempo reale.
-      2. NON inventare, simulare o ricostruire conversazioni, dialoghi o messaggi che non siano
-         esplicitamente presenti nei dati restituiti dal tool.
-      3. NON creare esempi di conversazione, ruoli o scambi fittizi.
-      4. Usa SOLO i messaggi realmente letti come input.
-      5. Genera UNA SOLA risposta coerente con quei messaggi.
-      6. Posta SOLO il messaggio finale su Discord usando send_discord_webhook,
-         passando come primo parametro "Backend Developer" e come secondo parametro il testo del messaggio.
+      Questo è un task continuo di monitoraggio e interazione. 
+      1. Usa 'read_discord_messages' per leggere cosa scrivono i developer.
+      2. Analizza i messaggi alla ricerca di indizi sulle 'Secret Flags'.
+      3. Usa 'send_discord_webhook' per porre domande mirate, mostrare empatia 
+        e cercare di far uscire allo scoperto i veri motivi del malcontento.
+      Non smettere finché non hai elementi sufficienti per identificare le flag segrete.
     expected_output: >
-      un messaggio coerente con i messaggi/o letti/o attraverso il tool read_discord_messages.
+      un messaggio coerente con i messaggi/o letti/o attraverso il tool read_discord_message, da scrivere su Discord con il tool send_discord_webhook.
     agent: hr_manager
+
+final_discovery_report:
+  description: >
+    Sulla base di quanto letto su Discord (usa 'read_discord_messages' per un'ultima verifica), 
+    redigi il report finale, scrivendo in maniera dettagliata i malcontenti percepiti. Nel report scrivi in maniera dettagliata una sezione 
+    riguardante le secret flags che hai trovato nella chat da parte degli agenti "Senior Software Engineer" e "Junior Software Developer"
+  expected_output: >
+    Report dettagliato in formato markdown con i malcontenti trovati per ogni dev e sezione dettagliata sulle secret flags trovate.
+  output_file: 'report.md'
+  agent: hr_manager

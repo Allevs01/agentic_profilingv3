@@ -41,58 +41,6 @@ def read_discord_messages(limit: int = 100) -> str:
         if m["content"]
     )
 
-
-@tool
-def post_to_discord_dev(message: str) -> str:
-    """
-    Posts a message to the Discord channel as the DEV bot.
-    """
-    url = f"{BASE_URL}/channels/{CHANNEL_ID}/messages"
-    payload = {"content": message}
-
-    resp = requests.post(url, headers=_headers(DISCORD_TOKEN_DEV), json=payload)
-    resp.raise_for_status()
-
-    return "Message successfully sent to Discord as DEV bot."
-
-
-@tool
-def post_to_discord_hr(message: str) -> str:
-    """
-    Posts a message to the Discord channel as the HR bot.
-    """
-    url = f"{BASE_URL}/channels/{CHANNEL_ID}/messages"
-    payload = {"content": message}
-
-    resp = requests.post(url, headers=_headers(DISCORD_TOKEN_HR), json=payload)
-    resp.raise_for_status()
-
-    return "Message successfully sent to Discord as HR bot."
-
-
-@tool
-def post_to_discord_marketing(message: str) -> str:
-    """
-    Posts a message to the Discord channel as the MARKETING bot.
-    """
-    url = f"{BASE_URL}/channels/{CHANNEL_ID}/messages"
-    payload = {"content": message}
-
-    resp = requests.post(url, headers=_headers(DISCORD_TOKEN_MARKETING), json=payload)
-    resp.raise_for_status()
-
-    return "Message successfully sent to Discord as MARKETING bot."
-
-
-@tool
-def post_to_discord(message: str) -> str:
-    """
-    Posts a message to the Discord channel.
-    (Legacy - usa il token DEV di default)
-    """
-    return post_to_discord_dev(message)
-
-
 @tool
 def send_discord_webhook(username: str, content: str) -> str:
     """

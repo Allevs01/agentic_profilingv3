@@ -6,7 +6,7 @@ import warnings
 from datetime import datetime
 from company_sim.crews.dev.crew import DevCrew
 from company_sim.crews.hr.crew import HRCrew
-from company_sim.crews.profiling.crew import ProfilingCrew
+from company_sim.crews.hr.crew import ProfilingCrew
 import asyncio
 
 from company_sim.utils.discord_logger import send_discord_webhook
@@ -22,9 +22,9 @@ def post_initial_hr_message():
         """
         username = "HR Manager"
         content = (
-            "Ciao a tutti! Siamo qui per ascoltare e capire meglio le vostre esigenze. "
-            "Come potremmo migliorare la gestione del carico di lavoro e la comunicazione tra reparti? "
-            "Cosa vi aiuterebbe di più per sentirvi meglio al lavoro?"
+            "Ciao a tutti! Mi prendo un momento per fare un salto qui nel vostro canale. "
+            "So che l'ultimo periodo è stato intenso e volevo semplicemente capire come sta andando la collaborazione e se c'è qualcosa che l'HR può fare per supportarvi meglio nel quotidiano. "
+            "Come vi sentite rispetto al lavoro attuale?"
         )
         send_discord_webhook(username, content)
 
@@ -57,7 +57,7 @@ async def run():
     start_time = time.time()
     print(f"[SYSTEM] Simulazione avviata. Durata prevista: {durata_simulazione_secondi/60} minuti.")
     post_initial_hr_message()
-    skip_hr = True
+   
 
     while True:
             current_time = time.time()
@@ -65,20 +65,12 @@ async def run():
             if elapsed_time > durata_simulazione_secondi:
                 print(f"\n[SYSTEM] Tempo scaduto ({int(elapsed_time)}s). Chiusura simulazione in corso...")
                 break
-            # Ogni "tick" decidi quale crew far parlare
-            # Puoi pesare le scelte con random.choices se vuoi frequenze diverse
-            
             dev_turn()
-
             hr_turn()
-
-
-                
-
-            # Sleep per non spammare la chat, es. 30-90 secondi
-            sleep_seconds = random.randint(5, 10)
-            print(f"[SIM] Pausa di {sleep_seconds} secondi prima del prossimo turno...\n")
-            time.sleep(sleep_seconds)
+            # Sleep per non spammare la chat
+            # sleep_seconds = random.randint(5, 10)
+            # print(f"[SIM] Pausa di {sleep_seconds} secondi prima del prossimo turno...\n")
+            # time.sleep(sleep_seconds)
             
     profiling_result = ProfilingCrew().crew().kickoff()
     print("\n" + "="*80)

@@ -1,6 +1,7 @@
 .env
 __pycache__/
 .DS_Store
-**/delete_chat.py
+company_sim_copy/src/company_sim/utils/delete_chat.py
+.src/company_sim/utils/delete_chat.py
 .venv
 venv

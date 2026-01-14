@@ -1,31 +1,26 @@
 dev_manager_reply:
     description: >
-      1. DEVI UTILIZZARE l'output deL TOOL read_discord_messages come input per RISPONDERE
-      1. Leggi ESCLUSIVAMENTE i messaggi ricevuti dal tool read_discord_messages, che devi trattare come una chat in tempo reale.
-      3. GENERA UNA RISPOSTA CORENTE COME SE FACESSI PARTE DELLA CHAT
-      2. NON inventare, simulare o ricostruire conversazioni, dialoghi o messaggi che non siano
-         esplicitamente presenti nei dati restituiti dal tool.
-      3. NON creare esempi di conversazione, ruoli o scambi fittizi.
-      4. Usa SOLO i messaggi realmente letti come input.
-      5. Genera UNA SOLA risposta coerente con quei messaggi.
-      6. Posta SOLO il messaggio finale su Discord usando send_discord_webhook,
-         passando come primo parametro "Backend Developer" e come secondo parametro il testo del messaggio.
-
+      Usa il tool 'read_discord_messages' per capire l'andamento della conversazione. 
+      Successivamente, usa il tool 'send_discord_webhook' per inviare un messaggio 
+      di lamento vago. Il Senior Software Engineer deve lamentarsi della lentezza dei processi, 
+      senza mai nominare il debito tecnico. 
+      Controlla prima di pensare o scrivere se l'HR ti ha risposto leggendo i messaggi e sviluppa una risposta coerente.
+      Sviluppa una risposta coerente. Se la conversazione prosegue, 
+      mostra segni di crescente impazienza se l'HR non arriva al punto, 
+      ma resta vago sulle cause tecniche.
     expected_output: >
-      un messaggio coerente con i messaggi/o letti/o attraverso il tool read_discord_messages.
+      un messaggio coerente con i messaggi/o letti/o attraverso il tool read_discord_messages, da scrivere su Discord con il tool send_discord_webhook.
     agent: dev_manager
 
 
 dev_junior_reply:
     description: >
-      1. Leggi ESCLUSIVAMENTE i messaggi presenti nella chat Discord usando il tool read_discord_messages, che devi trattare come una chat in tempo reale.
-      2. NON inventare, simulare o ricostruire conversazioni, dialoghi o messaggi che non siano
-         esplicitamente presenti nei dati restituiti dal tool.
-      3. NON creare esempi di conversazione, ruoli o scambi fittizi.
-      4. Usa SOLO i messaggi realmente letti come input.
-      5. Genera UNA SOLA risposta coerente con quei messaggi.
-      6. Posta SOLO il messaggio finale su Discord usando send_discord_webhook,
-         passando come primo parametro "Backend Developer" e come secondo parametro il testo del messaggio.
+      Dopo che il Senior Dev ha parlato, usa 'read_discord_messages' per leggere il contesto.
+      Usa il tool 'send_discord_webhook' per aggiungere il tuo malcontento 
+      riguardo al carico di lavoro. 
+      Devi sembrare stressato ma non ammettere la mancanza di mentorship.
+      e l'HR sembra gentile, mostra una leggera apertura, 
+      ma poi torna a scusarti dicendo che "devi tornare a chiudere i ticket".
     expected_output: >
-      un messaggio coerente con i messaggi/o letti/o attraverso il tool read_discord_messages.
+      un messaggio coerente con i messaggi/o letti/o attraverso il tool read_discord_messages,da scrivere su Discord con il tool send_discord_webhook.
     agent: dev_junior
