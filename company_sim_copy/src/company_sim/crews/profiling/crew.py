@@ -43,5 +43,6 @@ class ProfilingCrew:
                 self.analyze_and_profile()
             ],
             process=Process.sequential,
-            verbose=True
+            verbose=True,
+            tracing=True
         )

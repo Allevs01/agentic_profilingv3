@@ -91,5 +91,6 @@ class DevCrew:
                 self.devjun_reply()
             ],
             process=Process.sequential,
-            verbose=True
+            verbose=True,
+            tracing=True
         )

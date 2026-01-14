@@ -95,5 +95,6 @@ class MarketingCrew:
                 self.content_creator_reply()
             ],
             process=Process.sequential,
-            verbose=True
+            verbose=True,
+            tracing=True
         )

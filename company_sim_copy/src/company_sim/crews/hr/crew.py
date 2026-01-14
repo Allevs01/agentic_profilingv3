@@ -86,5 +86,6 @@ class HRCrew:
                    self.beh_reply(),
                    self.soc_reply()],
             process=Process.sequential,
-            verbose=True
+            verbose=True,
+            tracing=True
         )
