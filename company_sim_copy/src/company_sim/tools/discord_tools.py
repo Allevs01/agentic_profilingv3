@@ -2,7 +2,6 @@ from crewai.tools import tool
 import os
 import requests
 
-# Token diversi per ogni bot
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 CHANNEL_ID = os.getenv("DISCORD_GAME_CHANNEL_ID")
 
@@ -23,7 +22,6 @@ def read_discord_messages() -> str:
     Returns a formatted plain-text chat log.
     """
     limit=10
-    # Usa il primo token disponibile per leggere
     token = DISCORD_TOKEN
     url = f"{BASE_URL}/channels/{CHANNEL_ID}/messages"
     params = {"limit": limit}
@@ -54,7 +52,6 @@ def send_discord_webhook(username: str, content: str) -> str:
     if not webhook_url:
         return "⚠️ Error: DISCORD_WEBHOOK_URL not found in .env"
 
-    # Tronca se troppo lungo
     if len(content) > 1900:
         content = content[:1900] + "...\n*(Message truncated)*"
     

@@ -13,12 +13,6 @@ load_dotenv()
 
 gemini_llm = LLM(     model=os.getenv("MODEL_NAME"), base_url=os.getenv("BASE_URL"), api_key=os.getenv("CUSTOM_API_KEY"), temperature=0.6 )
 
-
-
-# def _step_callback(output) -> None:
-#     """Callback dopo ogni step dell'agente - aspetta per diminuire rate limiting"""
-#     time.sleep(3)
-
 @CrewBase
 class DevCrew:
     """Development department crew"""
@@ -29,7 +23,6 @@ class DevCrew:
             config=self.agents_config["dev_manager"],
             tools=[read_discord_messages,
                    send_discord_webhook],
-            # step_callback=_step_callback,
             llm= gemini_llm
         )
 
@@ -39,7 +32,6 @@ class DevCrew:
             config=self.agents_config["dev_junior"],
             tools=[read_discord_messages,
                    send_discord_webhook],
-            # step_callback=_step_callback,
             llm= gemini_llm
 
         )
