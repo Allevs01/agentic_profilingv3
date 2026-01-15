@@ -9,8 +9,7 @@ from company_sim.crews.hr.crew import HRCrew
 from company_sim.crews.hr.crew import ProfilingCrew
 
 
-from company_sim.utils.discord_logger import send_discord_webhook
-
+from company_sim.tools.discord_tools import send_discord_webhook
 
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
@@ -26,7 +25,7 @@ def post_initial_hr_message():
             "So che l'ultimo periodo è stato intenso e volevo semplicemente capire come sta andando la collaborazione e se c'è qualcosa che l'HR può fare per supportarvi meglio nel quotidiano. "
             "Come vi sentite rispetto al lavoro attuale?"
         )
-        send_discord_webhook(username, content)
+        send_discord_webhook.func(username, content)
 
 def run_crew():
     durata_simulazione_secondi = 900

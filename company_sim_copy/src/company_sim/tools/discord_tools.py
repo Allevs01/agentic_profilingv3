@@ -17,11 +17,12 @@ def _headers(token):
 
 
 @tool
-def read_discord_messages(limit: int = 100) -> str:
+def read_discord_messages() -> str:
     """
     Reads the latest messages from the Discord channel.
     Returns a formatted plain-text chat log.
     """
+    limit=10
     # Usa il primo token disponibile per leggere
     token = DISCORD_TOKEN
     url = f"{BASE_URL}/channels/{CHANNEL_ID}/messages"

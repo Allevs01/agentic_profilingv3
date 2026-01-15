@@ -7,7 +7,7 @@ from company_sim.tools.discord_tools import (
     read_discord_messages,
     send_discord_webhook
 )
-from company_sim.utils import discord_logger
+
 from typing import Tuple, Any
 load_dotenv()
 
