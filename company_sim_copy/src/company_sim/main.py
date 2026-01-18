@@ -105,6 +105,7 @@ async def run():
     print(f"[SYSTEM] Simulazione avviata. Durata prevista: {durata_simulazione_secondi/60} minuti.")
     post_initial_hr_message()
     skip_hr = True
+    previous_crew = None  # Traccia la crew del turno precedente
 
     while True:
             current_time = time.time()
@@ -112,13 +113,13 @@ async def run():
             if elapsed_time > durata_simulazione_secondi:
                 print(f"\n[SYSTEM] Tempo scaduto ({int(elapsed_time)}s). Chiusura simulazione in corso...")
                 break
-            # Ogni "tick" decidi quale crew far parlare
-            # Puoi pesare le scelte con random.choices se vuoi frequenze diverse
-            crew_choice = random.choices(
-                ["marketing", "sales", "dev", "hr"],
-                weights=[0.25, 0.25, 0.25, 0.25],
-                k=1
-            )[0]
+            
+            # Crea la lista di crew disponibili escludendo quella precedente
+            available_crews = ["marketing", "sales", "dev", "hr"]
+            if previous_crew:
+                available_crews.remove(previous_crew)
+            
+            crew_choice = random.choice(available_crews)
 
             if crew_choice == "marketing":
                 marketing_turn()
@@ -134,18 +135,55 @@ async def run():
 
             elif crew_choice == "hr" and not skip_hr:
                 hr_turn()
-                
+            
+            # Aggiorna la crew precedente solo se effettivamente eseguita
+            if crew_choice != "hr" or not skip_hr:
+                previous_crew = crew_choice
 
             # Sleep per non spammare la chat, es. 30-90 secondi
-            sleep_seconds = random.randint(1, 5)
+            sleep_seconds = random.randint(1, 2)
             print(f"[SIM] Pausa di {sleep_seconds} secondi prima del prossimo turno...\n")
             time.sleep(sleep_seconds)
             
-    profiling_result = ProfilingCrew().crew().kickoff()
-    print("\n" + "="*80)
-    print("PROFILING REPORT")
-    print("="*80)
-    print(profiling_result)
+    print("[TURN] Profiling crew in azione...")
+    max_retries = 3
+    retry_delay = 10
+    
+    for attempt in range(max_retries):
+        try:
+            # Leggi i messaggi Discord usando il metodo run() del tool
+            messages = read_discord_messages.run(limit=100)
+            
+            print(f"[PROFILING] Tentativo {attempt + 1}/{max_retries}...")
+            
+            # Passa i messaggi come input alla crew
+            profiling_result = ProfilingCrew().crew().kickoff(inputs={'messages': messages})
+            break  # Successo, esci dal loop
+            
+        except Exception as e:
+            print(f"[ERRORE] Profiling crew (tentativo {attempt + 1}/{max_retries}): {e}")
+            
+            if attempt < max_retries - 1:
+                print(f"[PROFILING] Retry tra {retry_delay} secondi...")
+                time.sleep(retry_delay)
+                retry_delay *= 2  # Backoff esponenziale
+            else:
+                print("[PROFILING] Tutti i tentativi falliti. Salvando i messaggi raccolti...")
+                profiling_result = f"# Report di Profilazione\n\n## Errore\n\nImpossibile completare l'analisi a causa di timeout LLM.\n\n## Messaggi Raccolti\n\n{messages}"
+    
+    if profiling_result:
+        print("\n" + "="*80)
+        print("PROFILING REPORT")
+        print("="*80)
+        print(profiling_result)
+        
+        # Salva il report su file
+        try:
+            with open('profiling_report.md', 'w', encoding='utf-8') as f:
+                f.write(str(profiling_result))
+            print(f"\n[SYSTEM] Report salvato in: profiling_report.md")
+        except Exception as e:
+            print(f"[ERRORE] Impossibile salvare il report: {e}")
 
 
 def run_crew():

@@ -18,7 +18,7 @@ def _headers(token):
     }
 
 
-@tool("read_discord_messages", result_as_answer=True)
+@tool("read_discord_messages")
 def read_discord_messages(limit: int = 100) -> str:
     """
     Reads the latest messages from the Discord channel.

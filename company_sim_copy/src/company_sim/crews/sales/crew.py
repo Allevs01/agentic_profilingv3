@@ -10,11 +10,7 @@ from company_sim.tools.discord_tools import (
 from company_sim.utils import discord_logger
 load_dotenv()
 # model = os.getenv("MODEL")
-gemini_llm = LLM(     model=os.getenv("MODEL_NAME"), base_url=os.getenv("BASE_URL"), api_key=os.getenv("CUSTOM_API_KEY") )
-
-def _step_callback(output) -> None:
-    """Callback dopo ogni step dell'agente - aspetta 10 secondi per diminuire rate limiting"""
-    time.sleep(1)
+gemini_llm = LLM(     model=os.getenv("MODEL_NAME"), base_url=os.getenv("BASE_URL"), api_key=os.getenv("CUSTOM_API_KEY"), temperature=0.2 )
 
 @CrewBase
 class SalesCrew:
@@ -25,7 +21,7 @@ class SalesCrew:
             config=self.agents_config["sales_manager"],
             tools=[send_discord_webhook],
             verbose=True,
-            step_callback=_step_callback,
+            allow_delegation=False,
             llm=gemini_llm
         )
 
@@ -35,7 +31,7 @@ class SalesCrew:
             config=self.agents_config["sales_account"],
             tools=[send_discord_webhook],
             verbose=True,
-            step_callback=_step_callback,
+            allow_delegation=False,
             llm=gemini_llm
         )
 
@@ -45,7 +41,7 @@ class SalesCrew:
             config=self.agents_config["sales_junior"],
             tools=[send_discord_webhook],
             verbose=True,
-            step_callback=_step_callback,
+            allow_delegation=False,
             llm=gemini_llm
         )
 
@@ -63,21 +59,25 @@ class SalesCrew:
     @task
     def sales_response_task(self) -> Task:
         return Task(
-            description="""You will receive Discord chat messages as input.
-            1. Analyze the conversation to identify sales-related topics: opportunities, customer requests, pricing, renewals, or churn risks.
-            2. Determine which sales team member is best suited to respond based on:
-               - Sales Manager: strategic decisions, closing deals, pipeline control, pushing for results
-               - Account Executive: customer relationships, managing expectations, diplomacy, protecting relationships
-               - Junior Sales Rep: operational follow-ups, simple clarifications, supporting seniors
-            3. Delegate the response to the most appropriate team member.
-            4. The chosen agent must:
-               - Write ONE short, professional Discord message
-               - Use their personality and expertise appropriately
-               - MUST Post the message using send_discord_webhook tool with their role name as first parameter and message text as second parameter,DO NOT provide a final answer without calling the tool first.
-            5. The response should be brief, action-oriented, and maintain the sales team's professional image.
+            description="""Riceverai i messaggi della chat Discord come input.
+            1. Analizza la conversazione per identificare temi di vendita: opportunità, richieste dei clienti, pricing, rinnovi o rischi di churn.
+            2. Decidi quale membro del team sales è più adatto a rispondere in base a:
+               - Sales Manager: decisioni strategiche, chiusura deal, controllo pipeline, focus sui risultati
+               - Account Executive: relazioni con i clienti, gestione delle aspettative, diplomazia, tutela delle relazioni
+               - Junior Sales Rep: follow-up operativi, chiarimenti semplici, supporto ai senior
+            3. Delega la risposta al membro del team più appropriato PER UNA SOLA VOLTA.
+            4. L’agente scelto deve:
+               - Scrivere UN solo messaggio Discord breve e professionale
+               - Usare la propria personalità ed expertise in modo adeguato
+               - DEVE inviare il messaggio usando il tool send_discord_webhook con:
+                    - username: il proprio role ("Sales Manager", "Account Executive" o "Junior Sales Representative")
+                    - content: il testo del messaggio da inviare
+            5. La risposta deve essere concisa, orientata all’azione e mantenere un’immagine professionale del team sales.
+            6. IMPORTANTE: Una volta che il messaggio è stato inviato a Discord con successo o meno, 
+                il task è COMPLETATO. Non ridelegare nessun agente dopo che il primo agente ha eseguito.
             
-            Chat messages: {messages}""",
-            expected_output="A well-crafted Discord message from the most appropriate sales team member",
+            Messaggi della chat: {messages}""",
+            expected_output="Un messaggio Discord ben formulato dal membro sales più appropriato",
         )
 
     @crew
@@ -92,6 +92,7 @@ class SalesCrew:
                 self.sales_response_task()
             ],
             manager_agent=self.manager(),
+            manager_llm=gemini_llm,
             process=Process.hierarchical,
             max_iterations=1,
             verbose=True

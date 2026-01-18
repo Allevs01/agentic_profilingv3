@@ -10,11 +10,7 @@ from company_sim.tools.discord_tools import (
 from company_sim.utils import discord_logger
 load_dotenv()
 # model = os.getenv("MODEL")
-gemini_llm = LLM(     model=os.getenv("MODEL_NAME"), base_url=os.getenv("BASE_URL"), api_key=os.getenv("CUSTOM_API_KEY") )
-
-def _step_callback(output) -> None:
-    """Callback dopo ogni step dell'agente - aspetta 10 secondi per diminuire rate limiting"""
-    time.sleep(1)
+gemini_llm = LLM(     model=os.getenv("MODEL_NAME"), base_url=os.getenv("BASE_URL"), api_key=os.getenv("CUSTOM_API_KEY"), temperature=0.2 )
 
 @CrewBase
 class HRCrew:
@@ -26,27 +22,7 @@ class HRCrew:
             config=self.agents_config["hr_manager"],
             tools=[send_discord_webhook],
             verbose=True,
-            step_callback=_step_callback,
-            llm=gemini_llm
-        )
-
-    @agent
-    def hr_business_partner(self) -> Agent:
-        return Agent(
-            config=self.agents_config["hr_business_partner"],
-            tools=[send_discord_webhook],
-            verbose=True,
-            step_callback=_step_callback,
-            llm=gemini_llm
-        )
-
-    @agent
-    def hr_junior(self) -> Agent:
-        return Agent(
-            config=self.agents_config["hr_junior"],
-            tools=[send_discord_webhook],
-            verbose=True,
-            step_callback=_step_callback,
+            allow_delegation=False,
             llm=gemini_llm
         )
 
@@ -64,31 +40,30 @@ class HRCrew:
     @task
     def hr_response_task(self) -> Task:
         return Task(
-            description="""You will receive Discord chat messages as input.
-            1. Analyze the conversation to identify HR-related signals: stress, burnout, conflicts, retention risks, team dynamics, or misalignment between management and teams.
-            2. Determine which HR team member is best suited to respond based on:
-               - HR Manager: climate risks, conflicts, retention issues, strategic people concerns, gathering intel
-               - HR Business Partner: misalignment between business and teams, mediation, practical compromises
-               - HR Junior: simple questions, curious follow-ups, creating trust through innocent-seeming questions
-            3. Delegate the response to the most appropriate team member.
-            4. The chosen agent must:
-               - Write ONE short, empathetic Discord message
-               - Use open-ended questions to gather more information WITHOUT seeming like an interrogation
-               - Post the message using send_discord_webhook tool with their role name as first parameter and message text as second parameter
-            5. MUST Post the message using send_discord_webhook tool with their role name as first parameter and message text as second parameter,DO NOT provide a final answer without calling the tool first.
+            description="""Riceverai i messaggi della chat Discord come input.
+            1. Analizza la conversazione per identificare segnali HR: stress, burnout, conflitti, rischi di retention, dinamiche di team o disallineamento tra team.
+            2. Delega la risposta al membro del team più appropriato PER UNA SOLA VOLTA.
+            3. L’agente scelto deve:
+               - Scrivere UN solo messaggio Discord, breve ed empatico
+               - Usare domande aperte per ottenere più informazioni SENZA sembrare un interrogatorio
+               - DEVE inviare il messaggio usando il tool send_discord_webhook con:
+                    - username: il proprio role ("HR Manager")
+                    - content: il testo del messaggio da inviare
+            4. DEVE inviare il messaggio usando il tool send_discord_webhook con il nome del proprio role come primo parametro e il testo del messaggio come secondo parametro; NON fornire una risposta finale senza prima chiamare il tool.
+            5. IMPORTANTE: Una volta che il messaggio è stato inviato a Discord con successo o meno, 
+                il task è COMPLETATO. Non ridelegare nessun agente dopo che il primo agente ha eseguito.
             
-            Chat messages: {messages}""",
-            expected_output="A well-crafted Discord message from the most appropriate HR team member",
+            Messaggi della chat: {messages}""",
+            expected_output="Un messaggio Discord ben formulato dal membro HR più appropriato",
         )
 
     @crew
     def crew(self) -> Crew:
         return Crew(
-            agents=[self.hr_manager(),
-                    self.hr_business_partner(),
-                    self.hr_junior()],
+            agents=[self.hr_manager()],
             tasks=[self.hr_response_task()],
             manager_agent=self.manager(),
+            manager_llm=gemini_llm,
             process=Process.hierarchical,
             max_iterations=1,
             verbose=True

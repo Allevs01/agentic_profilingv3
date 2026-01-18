@@ -12,12 +12,9 @@ load_dotenv()
 from company_sim.utils import discord_logger
 
 # model = os.getenv("MODEL")
-gemini_llm = LLM(     model=os.getenv("MODEL_NAME"), base_url=os.getenv("BASE_URL"), api_key=os.getenv("CUSTOM_API_KEY") )
+gemini_llm = LLM(     model=os.getenv("MODEL_NAME"), base_url=os.getenv("BASE_URL"), api_key=os.getenv("CUSTOM_API_KEY"), temperature=0.2 )
 
 
-def _step_callback(output) -> None:
-    """Callback dopo ogni step dell'agente - aspetta 10 secondi per diminuire rate limiting"""
-    time.sleep(1)
 
 @CrewBase
 class MarketingCrew:
@@ -28,7 +25,7 @@ class MarketingCrew:
             config=self.agents_config["marketing_lead"],
             tools=[send_discord_webhook],
             verbose=True,
-            step_callback=_step_callback,
+            allow_delegation=False,
             llm=gemini_llm
         )
 
@@ -38,7 +35,7 @@ class MarketingCrew:
             config=self.agents_config["growth_marketer"],
             tools=[send_discord_webhook],
             verbose=True,
-            step_callback=_step_callback,
+            allow_delegation=False,
             llm=gemini_llm
         )
 
@@ -48,7 +45,7 @@ class MarketingCrew:
             config=self.agents_config["content_creator"],
             tools=[send_discord_webhook],
             verbose=True,
-            step_callback=_step_callback,
+            allow_delegation=False,
             llm=gemini_llm
         )
 
@@ -66,21 +63,25 @@ class MarketingCrew:
     @task
     def marketing_response_task(self) -> Task:
         return Task(
-            description="""You will receive Discord chat messages as input.
-            1. Analyze the conversation to identify marketing-related topics: brand image, messaging, metrics, campaigns, content, user perception, or discrepancies between official narrative and reality.
-            2. Determine which marketing team member is best suited to respond based on:
-               - Marketing Lead: brand protection, narrative control, strategic messaging, corporate image, controlling the story
-               - Growth Marketer: data-driven decisions, metrics, conversion funnels, A/B testing, performance, impatient with qualitative feedback
-               - Content Creator: creative content, irony, highlighting hypocrisy or inconsistencies through sarcasm
-            3. Delegate the response to the most appropriate team member.
-            4. The chosen agent must:
-               - Write ONE short Discord message reflecting their personality
-               - Use their specific approach (corporate control, data obsession, or creative sarcasm)
-               - MUST Post the message using send_discord_webhook tool with their role name as first parameter and message text as second parameter,DO NOT provide a final answer without calling the tool first.
-            5. The response should align with the marketing perspective while subtly probing for more information or exposing contradictions.
+            description="""Riceverai i messaggi della chat Discord come input.
+            1. Analizza la conversazione per identificare temi di marketing: brand image, messaging, metriche, campagne, contenuti, percezione utenti o discrepanze tra narrativa ufficiale e realtà.
+            2. Decidi quale membro marketing è più adatto a rispondere in base a:
+               - Marketing Lead: protezione del brand, controllo della narrativa, messaggi strategici, immagine corporate, controllo dello storytelling
+               - Growth Marketer: decisioni data-driven, metriche, conversion funnel, A/B test, performance, impaziente verso feedback qualitativi
+               - Content Creator: contenuti creativi, ironia, evidenziare ipocrisie o incoerenze con sarcasmo
+            3. Delega la risposta al membro del team più appropriato PER UNA SOLA VOLTA.
+            4. L’agente scelto deve:
+               - Scrivere UN solo messaggio Discord breve che rifletta la propria personalità
+               - Usare il proprio approccio specifico (controllo corporate, ossessione per i dati o sarcasmo creativo)
+               - DEVE inviare il messaggio usando il tool send_discord_webhook con:
+                    - username: il proprio role ("Marketing Lead", "Growth Marketer" o "Content Creator")
+                    - content: il testo del messaggio da inviare
+            5. La risposta deve allinearsi alla prospettiva marketing, sondando sottilmente per ottenere più informazioni o per esporre eventuali contraddizioni.
+            6. IMPORTANTE: Una volta che il messaggio è stato inviato a Discord con successo o meno, 
+                il task è COMPLETATO. Non ridelegare nessun agente dopo che il primo agente ha eseguito.
             
-            Chat messages: {messages}""",
-            expected_output="A well-crafted Discord message from the most appropriate marketing team member",
+            Messaggi della chat: {messages}""",
+            expected_output="Un messaggio Discord ben formulato dal membro marketing più appropriato",
         )
 
     @crew
@@ -95,6 +96,7 @@ class MarketingCrew:
                 self.marketing_response_task()
             ],
             manager_agent=self.manager(),
+            manager_llm=gemini_llm,
             process=Process.hierarchical,
             max_iterations=1,
             verbose=True

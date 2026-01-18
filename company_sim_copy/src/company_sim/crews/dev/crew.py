@@ -10,12 +10,8 @@ from company_sim.tools.discord_tools import (
 from company_sim.utils import discord_logger
 load_dotenv()
 # model = os.getenv("MODEL")
-gemini_llm = LLM(     model=os.getenv("MODEL_NAME"), base_url=os.getenv("BASE_URL"), api_key=os.getenv("CUSTOM_API_KEY") )
+gemini_llm = LLM(     model=os.getenv("MODEL_NAME"), base_url=os.getenv("BASE_URL"), api_key=os.getenv("CUSTOM_API_KEY"), temperature=0.2 )
 
-
-def _step_callback(output) -> None:
-    """Callback dopo ogni step dell'agente - aspetta 10 secondi per diminuire rate limiting"""
-    time.sleep(1)
 
 @CrewBase
 class DevCrew:
@@ -27,7 +23,7 @@ class DevCrew:
             config=self.agents_config["dev_manager"],
             tools=[send_discord_webhook],
             verbose=True,
-            step_callback=_step_callback,
+            allow_delegation=False,
             llm= gemini_llm
         )
 
@@ -37,7 +33,7 @@ class DevCrew:
             config=self.agents_config["dev_backend"],
             tools=[send_discord_webhook],
             verbose=True,
-            step_callback=_step_callback,
+            allow_delegation=False,
             llm= gemini_llm
 
         )
@@ -48,7 +44,7 @@ class DevCrew:
             config=self.agents_config["dev_junior"],
             tools=[send_discord_webhook],
             verbose=True,
-            step_callback=_step_callback,
+            allow_delegation=False,
             llm= gemini_llm
 
         )
@@ -67,21 +63,25 @@ class DevCrew:
     @task
     def dev_response_task(self) -> Task:
         return Task(
-            description="""You will receive Discord chat messages as input.
-            1. Analyze the conversation to identify development-related topics: bugs, features, technical architecture, performance, security, or technical debt.
-            2. Determine which developer is best suited to respond based on:
-               - Senior Software Engineer: architecture decisions, legacy code, technical quality, complex problems, defensive about past choices
-               - Backend Developer: API issues, database problems, performance, scalability, concrete technical solutions
-               - Junior Developer: simple tasks, operational support, learning opportunities, low-risk changes
-            3. Delegate the response to the most appropriate team member.
-            4. The chosen agent must:
-               - Write ONE short, technical Discord message
-               - Use their personality and technical expertise appropriately
-               - MUST Post the message using send_discord_webhook tool with their role name as first parameter and message text as second parameter,DO NOT provide a final answer without calling the tool first.
-            5. The response should be technically accurate, pragmatic, and protect code quality.
+            description="""Riceverai i messaggi della chat Discord come input.
+            1. Analizza la conversazione per identificare temi di sviluppo: bug, feature, architettura tecnica, performance, sicurezza o debito tecnico.
+            2. Decidi quale sviluppatore è più adatto a rispondere in base a:
+               - Senior Software Engineer: decisioni architetturali, codice legacy, qualità tecnica, problemi complessi, difesa delle scelte passate
+               - Backend Developer: problemi API, database, performance, scalabilità, soluzioni tecniche concrete
+               - Junior Developer: task semplici, supporto operativo, opportunità di apprendimento, modifiche a basso rischio
+            3. Delega la risposta al membro del team più appropriato PER UNA SOLA VOLTA.
+            4. L’agente scelto deve:
+               - Scrivere UN solo messaggio Discord, tecnico e sintetico
+               - Usare la propria personalità ed expertise tecnica in modo adeguato
+               - DEVE inviare il messaggio usando il tool send_discord_webhook con:
+                    - username: il proprio role ("Senior Software Engineer", "Backend Developer" o "Junior Developer")
+                    - content: il testo del messaggio da inviare
+            5. La risposta deve essere tecnicamente accurata, pragmatica e tutelare la qualità del codice.
+            6. IMPORTANTE: Una volta che il messaggio è stato inviato a Discord con successo o meno, 
+                il task è COMPLETATO. Non ridelegare nessun agente dopo che il primo agente ha eseguito.
             
-            Chat messages: {messages}""",
-            expected_output="A well-crafted Discord message from the most appropriate developer",
+            Messaggi della chat: {messages}""",
+            expected_output="Un messaggio Discord ben formulato dallo sviluppatore più appropriato",
         )
 
     @crew
