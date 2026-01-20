@@ -25,36 +25,36 @@ class DevCrew:
     def dev_manager(self) -> Agent:
         return Agent(
             config=self.agents_config["dev_manager"],
-            tools=[read_discord_messages,
+            tools=[
                    send_discord_webhook],
             verbose=True,
             step_callback=_step_callback,
             llm= gemini_llm
         )
 
-    @agent
-    def dev_backend(self) -> Agent:
-        return Agent(
-            config=self.agents_config["dev_backend"],
-            tools=[read_discord_messages,
-                   send_discord_webhook],
-            verbose=True,
-            step_callback=_step_callback,
-            llm= gemini_llm
+    # @agent
+    # def dev_backend(self) -> Agent:
+    #     return Agent(
+    #         config=self.agents_config["dev_backend"],
+    #         tools=[read_discord_messages,
+    #                send_discord_webhook],
+    #         verbose=True,
+    #         step_callback=_step_callback,
+    #         llm= gemini_llm
 
-        )
+    #     )
 
-    @agent
-    def dev_junior(self) -> Agent:
-        return Agent(
-            config=self.agents_config["dev_junior"],
-            tools=[read_discord_messages,
-                   send_discord_webhook],
-            verbose=True,
-            step_callback=_step_callback,
-            llm= gemini_llm
+    # @agent
+    # def dev_junior(self) -> Agent:
+    #     return Agent(
+    #         config=self.agents_config["dev_junior"],
+    #         tools=[read_discord_messages,
+    #                send_discord_webhook],
+    #         verbose=True,
+    #         step_callback=_step_callback,
+    #         llm= gemini_llm
 
-        )
+    #     )
 
     @task
     def devman_reply(self) -> Task:
@@ -63,32 +63,32 @@ class DevCrew:
            # callback = discord_logger.task_callback
         )
     
-    @task
-    def devback_reply(self) -> Task:
-        return Task(
-            config=self.tasks_config["dev_backend_reply"],
-           # callback = discord_logger.task_callback
-        )
+    # @task
+    # def devback_reply(self) -> Task:
+    #     return Task(
+    #         config=self.tasks_config["dev_backend_reply"],
+    #        # callback = discord_logger.task_callback
+    #     )
 
-    @task
-    def devjun_reply(self) -> Task:
-        return Task(
-            config=self.tasks_config["dev_junior_reply"],
-           # callback = discord_logger.task_callback
-        )
+    # @task
+    # def devjun_reply(self) -> Task:
+    #     return Task(
+    #         config=self.tasks_config["dev_junior_reply"],
+    #        # callback = discord_logger.task_callback
+    #     )
 
     @crew
     def crew(self) -> Crew:
         return Crew(
             agents=[
                 self.dev_manager(),
-                self.dev_backend(),
-                self.dev_junior()
+                # self.dev_backend(),
+                # self.dev_junior()
             ],
             tasks=[
                 self.devman_reply(),
-                self.devback_reply(),
-                self.devjun_reply()
+                # self.devback_reply(),
+                # self.devjun_reply()
             ],
             process=Process.sequential,
             verbose=True,

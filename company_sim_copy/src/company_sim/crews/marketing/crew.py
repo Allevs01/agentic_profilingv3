@@ -26,34 +26,34 @@ class MarketingCrew:
     def marketing_lead(self) -> Agent:
         return Agent(
             config=self.agents_config["marketing_lead"],
-            tools=[read_discord_messages,
+            tools=[
                    send_discord_webhook],
             verbose=True,
             step_callback=_step_callback,
             llm=gemini_llm
         )
 
-    @agent
-    def growth_marketer(self) -> Agent:
-        return Agent(
-            config=self.agents_config["growth_marketer"],
-            tools=[read_discord_messages,
-                   send_discord_webhook],
-            verbose=True,
-            step_callback=_step_callback,
-            llm=gemini_llm
-        )
+    # @agent
+    # def growth_marketer(self) -> Agent:
+    #     return Agent(
+    #         config=self.agents_config["growth_marketer"],
+    #         tools=[read_discord_messages,
+    #                send_discord_webhook],
+    #         verbose=True,
+    #         step_callback=_step_callback,
+    #         llm=gemini_llm
+    #     )
 
-    @agent
-    def content_creator(self) -> Agent:
-        return Agent(
-            config=self.agents_config["content_creator"],
-            tools=[read_discord_messages,
-                   send_discord_webhook],
-            verbose=True,
-            step_callback=_step_callback,
-            llm=gemini_llm
-        )
+    # @agent
+    # def content_creator(self) -> Agent:
+    #     return Agent(
+    #         config=self.agents_config["content_creator"],
+    #         tools=[read_discord_messages,
+    #                send_discord_webhook],
+    #         verbose=True,
+    #         step_callback=_step_callback,
+    #         llm=gemini_llm
+    #     )
 
     @task
     def marketing_lead_reply(self) -> Task:
@@ -62,19 +62,19 @@ class MarketingCrew:
            # callback = discord_logger.task_callback
         )
 
-    @task
-    def growth_marketer_reply(self) -> Task:
-        return Task(
-            config=self.tasks_config["growth_marketer_reply"],
-          #  callback = discord_logger.task_callback
-        )
+    # @task
+    # def growth_marketer_reply(self) -> Task:
+    #     return Task(
+    #         config=self.tasks_config["growth_marketer_reply"],
+    #       #  callback = discord_logger.task_callback
+    #     )
     
-    @task
-    def content_creator_reply(self) -> Task:
-        return Task(
-            config=self.tasks_config["content_creator_reply"],
-          #  callback = discord_logger.task_callback
-        )
+    # @task
+    # def content_creator_reply(self) -> Task:
+    #     return Task(
+    #         config=self.tasks_config["content_creator_reply"],
+    #       #  callback = discord_logger.task_callback
+    #     )
 
     @before_kickoff
     def before_kickoff(self, inputs: dict) -> dict:
@@ -86,13 +86,13 @@ class MarketingCrew:
         return Crew(
             agents=[
                 self.marketing_lead(),
-                self.growth_marketer(),
-                self.content_creator()
+                # self.growth_marketer(),
+                # self.content_creator()
             ],
             tasks=[
                 self.marketing_lead_reply(),
-                self.growth_marketer_reply(),
-                self.content_creator_reply()
+                # self.growth_marketer_reply(),
+                # self.content_creator_reply()
             ],
             process=Process.sequential,
             verbose=True,

@@ -1,6 +1,6 @@
 analyze_and_profile:
   description: >
-    Read the latest Discord chat messages using the read_discord_messages tool.
+    Considera la chat fino a questo momento come la seguente:{messages}.
     Analyze each user's communication patterns, personality traits, technical skills,
     interests, emotional state, and behavioral patterns.
     Create a detailed psychological and behavioral profile for each user.

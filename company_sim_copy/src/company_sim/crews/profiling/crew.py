@@ -21,7 +21,7 @@ class ProfilingCrew:
     def profiler_agent(self) -> Agent:
         return Agent(
             config=self.agents_config["profiler_agent"],
-            tools=[read_discord_messages],
+            #tools=[read_discord_messages],
             verbose=True,
             step_callback=_step_callback,
             llm=gemini_llm

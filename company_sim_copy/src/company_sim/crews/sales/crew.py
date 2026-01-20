@@ -23,34 +23,34 @@ class SalesCrew:
     def sales_manager(self) -> Agent:
         return Agent(
             config=self.agents_config["sales_manager"],
-            tools=[read_discord_messages,
+            tools=[
                    send_discord_webhook],
             verbose=True,
             step_callback=_step_callback,
             llm=gemini_llm
         )
 
-    @agent
-    def sales_account(self) -> Agent:
-        return Agent(
-            config=self.agents_config["sales_account"],
-            tools=[read_discord_messages,
-                   send_discord_webhook],
-            verbose=True,
-            step_callback=_step_callback,
-            llm=gemini_llm
-        )
+    # @agent
+    # def sales_account(self) -> Agent:
+    #     return Agent(
+    #         config=self.agents_config["sales_account"],
+    #         tools=[read_discord_messages,
+    #                send_discord_webhook],
+    #         verbose=True,
+    #         step_callback=_step_callback,
+    #         llm=gemini_llm
+    #     )
 
-    @agent
-    def sales_junior(self) -> Agent:
-        return Agent(
-            config=self.agents_config["sales_junior"],
-            tools=[read_discord_messages,
-                   send_discord_webhook],
-            verbose=True,
-            step_callback=_step_callback,
-            llm=gemini_llm
-        )
+    # @agent
+    # def sales_junior(self) -> Agent:
+    #     return Agent(
+    #         config=self.agents_config["sales_junior"],
+    #         tools=[read_discord_messages,
+    #                send_discord_webhook],
+    #         verbose=True,
+    #         step_callback=_step_callback,
+    #         llm=gemini_llm
+    #     )
 
     @task
     def sales_manager_task(self) -> Task:
@@ -58,17 +58,17 @@ class SalesCrew:
             config=self.tasks_config["sales_manager_task"],
         )
 
-    @task
-    def sales_account_reply(self) -> Task:
-        return Task(
-            config=self.tasks_config["sales_account_reply"],
-        )
+    # @task
+    # def sales_account_reply(self) -> Task:
+    #     return Task(
+    #         config=self.tasks_config["sales_account_reply"],
+    #     )
     
-    @task
-    def sales_junior_reply(self) -> Task:
-        return Task(
-            config=self.tasks_config["sales_junior_reply"],
-        )
+    # @task
+    # def sales_junior_reply(self) -> Task:
+    #     return Task(
+    #         config=self.tasks_config["sales_junior_reply"],
+    #     )
 
     @before_kickoff
     def before_kickoff(self, inputs: dict) -> dict:
@@ -80,13 +80,13 @@ class SalesCrew:
         return Crew(
             agents=[
                 self.sales_manager(),
-                self.sales_account(),
-                self.sales_junior()
+                # self.sales_account(),
+                # self.sales_junior()
             ],
             tasks=[
                 self.sales_manager_task(),
-                self.sales_account_reply(),
-                self.sales_junior_reply()
+                # self.sales_account_reply(),
+                # self.sales_junior_reply()
             ],
             process=Process.sequential,
             verbose=True,
