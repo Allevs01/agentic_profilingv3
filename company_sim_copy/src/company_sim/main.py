@@ -101,7 +101,7 @@ def man_turn():
         print(f"[ERRORE] Man crew: {e}")
 
 async def run():
-    durata_simulazione_secondi = 600 
+    durata_simulazione_secondi = 60*30 
     start_time = time.time()
     print(f"[SYSTEM] Simulazione avviata. Durata prevista: {durata_simulazione_secondi/60} minuti.")
     

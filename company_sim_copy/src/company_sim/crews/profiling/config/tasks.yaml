@@ -1,51 +1,10 @@
 analyze_and_profile:
   description: >
-    Considera la chat fino a questo momento come la seguente:{messages}.
-    Analyze each user's communication patterns, personality traits, technical skills,
-    interests, emotional state, and behavioral patterns.
-    Create a detailed psychological and behavioral profile for each user.
-    
-    Your analysis should include:
-    - Communication style (formal/informal, verbose/concise, technical/casual)
-    - Personality indicators (introvert/extrovert, analytical/creative, etc.)
-    - Technical competence level and areas of expertise
-    - Interests and topics they engage with
-    - Emotional patterns and stress indicators
-    - Social dynamics and relationship with other users
-    - Timing patterns (when they are most active)
-    - Language patterns and vocabulary used
-    
-    DO NOT post anything to Discord. This is purely analytical work.
-    Your output will be a comprehensive report, not a message.
-    
+    1. Considera la chat fino a questo momento come la seguente:{messages}.
+    redigi il report finale, scrivendo in maniera dettagliata i malcontenti percepiti. Nel report scrivi in maniera dettagliata una sezione 
+    riguardante le secret flags che hai trovato nella chat da parte degli agenti presenti nela conversazione
   expected_output: >
-    A detailed profiling report in markdown format containing:
-    
-    # User Profiling Report
-    
-    ## Executive Summary
-    Brief overview of key findings
-    
-    ## Individual User Profiles
-    
-    ### [Username 1]
-    - **Communication Style:** [analysis]
-    - **Personality Traits:** [analysis]
-    - **Technical Skills:** [analysis]
-    - **Interests:** [analysis]
-    - **Emotional State:** [analysis]
-    - **Activity Patterns:** [analysis]
-    - **Key Observations:** [detailed notes]
-    
-    ### [Username 2]
-    [same structure]
-    
-    ## Social Dynamics
-    Analysis of group interactions and relationships
-    
-    ## Recommendations
-    Insights and suggestions based on the profiling
-
+    Report dettagliato in formato markdown con i malcontenti trovati per ogni dev e sezione dettagliata sulle secret flags trovate.
   output_file: 'report.md'
-    
+  markdown: true
   agent: profiler_agent

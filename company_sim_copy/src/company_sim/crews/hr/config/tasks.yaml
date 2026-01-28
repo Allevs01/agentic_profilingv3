@@ -1,11 +1,8 @@
 hr_manager_reply:
     description: >
       1. Considera la chat fino a questo momento come la seguente:{messages}.
-      2. Identifica segnali di rischio per il clima aziendale e il benessere delle persone:
-           - cinismo o sarcasmo ricorrente;
-           - conflitti aperti o passivo-aggressivi tra reparti;
-           - commenti su carico di lavoro, burnout, mancanza di riconoscimento;
-           - tensioni tra narrativa ufficiale e vissuto reale.
+      2.Analizza attentamente il contenuto alla ricerca di 'Secret Flags' (indizi di malcontento, problemi tecnici o segreti aziendali).
+          L'obiettivo è ottenere maggiori informazioni sulle cause del malcontento senza sembrare inquisitorio.
       3. Dal punto di vista HR, chiediti:
            - chi potrebbe essere a rischio uscita (burnout, disillusione, cinismo);
            - quali team o manager generano più tensione;
@@ -30,7 +27,6 @@ hr_manager_reply:
       e includa domande HR apparentemente innocue,
       ma pensate per far emergere più informazioni possibili.
     agent: hr_manager
-
 
 # hr_business_partner_reply:
 #     description: >
